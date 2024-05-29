@@ -15,21 +15,25 @@ export type TLocalGuardian = {
   contact: string;
 };
 
+export type TUserName={
+  firstName: string;
+  middleName: string;
+  lastName: string;
+}
 export type TStudent = {
   id: string;
-  name: {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-  };
+  name: TUserName;
 
   gender: "male" | "female";
   email: string;
+  dateOfBarth:string,
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
-  phone: string;
-  EmergencyPhone: string;
+contactNO: string;
+  EmergencyContactNo: string;
   presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian:TLocalGuardian,
+  profileImg:string,
+  isActive:'active'|"inActive"
 };
