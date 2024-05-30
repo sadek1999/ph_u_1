@@ -5,3 +5,4 @@ const router=express.Router()
 
 router.post('/crate-student',studentControllers.createStudent)
 
+export const studentRoutes=router
