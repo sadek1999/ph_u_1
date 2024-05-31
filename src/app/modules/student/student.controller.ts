@@ -16,7 +16,11 @@ const createStudent=async(req :Request,res:Response)=>{
     })
   }
   catch(err){
-    console.log(err)
+    res.status(500).json({
+      success:false,
+      massage:'sumThing want wrong',
+      error:err
+    })
   }
     
 }
@@ -32,7 +36,11 @@ const getAllStudents=async(req:Request,res:Response)=>{
   })
 
   }catch(err){
-    console.log(err)
+    res.status(500).json({
+      success:false,
+      massage:'sumThink want wrong',
+      error:err
+    })
   }
 }
 

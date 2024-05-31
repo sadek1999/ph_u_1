@@ -1,21 +1,23 @@
 import { Schema, model } from "mongoose";
-import { TGuardian, TLocalGuardian, TStudent, TUserName } from "./student/student.interface";
+import { TGuardian, TLocalGuardian, TStudent, TUserName } from "./student.interface";
+import z from "zod"
 
 
 // Define the schemas
-const userNameSchema = new Schema<TUserName>({
-  firstName: { type: String, required: true },
-  middleName: { type: String },
-  lastName: { type: String, required: true },
-});
+const userNameValidationSchema = z.object({
+    firstName:z.string(),
+    middleName:z.string(),
+    lastName:z.string()
+    
+})
 
-const guardianSchema = new Schema<TGuardian>({
-  fatherName: { type: String, required: true },
-  fatherContact: { type: String, required: true },
-  fatherOccupation: { type: String, required: true },
-  motherName: { type: String, required: true },
-  motherContact: { type: String, required: true },
-  motherOccupation: { type: String, required: true },
+const guardianSchema = z.object({
+  fatherName: z.string(),
+  fatherContact: z.string(),
+  fatherOccupation:z.string(),
+  motherName: z.string(),
+  motherContact: z.string(),
+  motherOccupation: z.string( ),
 });
 
 const localGuardianSchema = new Schema<TLocalGuardian>({
@@ -43,4 +45,3 @@ const studentSchema = new Schema<TStudent>({
 
 
 
-export  const studentModel=model<TStudent>('student',studentSchema)
