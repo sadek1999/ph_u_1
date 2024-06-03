@@ -1,12 +1,16 @@
 import { Schema, model } from "mongoose";
+import bcrypt from "bcrypt";
+
 import {
-  StudentMethods,
-  StudentModels,
+  StudentModel,
   TGuardian,
   TLocalGuardian,
   TStudent,
   TUserName,
 } from "./student/student.interface";
+import config from "../../config";
+import { boolean } from "zod";
+
 
 // Define the schemas
 const userNameSchema = new Schema<TUserName>({
@@ -30,8 +34,9 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   contact: { type: String, required: true },
 });
 
-const studentSchema = new Schema<TStudent, StudentModels, StudentMethods>({
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: true },
+  password: { type: String, required: true },
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ["male", "female"], required: true },
   email: { type: String, required: true },
@@ -48,12 +53,40 @@ const studentSchema = new Schema<TStudent, StudentModels, StudentMethods>({
   localGuardian: { type: localGuardianSchema, required: true },
   profileImg: { type: String, required: true },
   isActive: { type: String, enum: ["active", "inActive"] },
+  isDelated:{type:Boolean, default:false}
 });
 
-studentSchema.methods.isUserExist=async function (id:string) {
-  const userExist =await Student.findOne({id})
-  return userExist;
-  
-}
+// Pre  mongoose hook
 
-export const Student = model<TStudent ,StudentModels>("student", studentSchema);
+studentSchema.pre("save",async function (next) {
+  let  user=this;
+  user.password=await bcrypt.hash(user.password,Number(config.saltRound));
+  next()
+});
+
+// post mongoose hook/middleware
+
+studentSchema.post("save", function (doc,next) {
+  doc.password=''
+  console.log( "from post hook");
+  next()
+});
+
+studentSchema.pre("find",async function () {
+  console.log(this)
+})
+
+// creating a custom static
+
+studentSchema.statics.isUserExist = async function (id: string) {
+  const existingUser = await Student.findOne({ id });
+  return existingUser;
+};
+
+// studentSchema.methods.isUserExist=async function (id:string) {
+//   const userExist =await Student.findOne({id})
+// return userExist;
+
+// }
+
+export const Student = model<TStudent, StudentModel>("student", studentSchema);

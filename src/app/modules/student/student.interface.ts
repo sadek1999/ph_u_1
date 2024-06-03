@@ -26,6 +26,7 @@ export type TGuardian = {
   
   export type TStudent = {
     id: string;
+    password:string,
     name: TUserName;
     gender: 'male' | 'female';
     email: string;
@@ -39,11 +40,16 @@ export type TGuardian = {
     localGuardian: TLocalGuardian;
     profileImg?: string;
     isActive: 'active' | 'blocked';
+    isDelated:boolean
   };
   
 
-  export type StudentMethods={
-    isUserExist(id:string):Promise<TStudent |null>
+   export interface StudentModel extends Model<TStudent> {
+    isUserExist(id:string):Promise<TStudent| null>
   }
 
-export  type StudentModels = Model<TStudent, {}, StudentMethods>;
+  // export type StudentMethods={
+  //   isUserExist(id:string):Promise<TStudent |null>
+  // }
+
+// export  type StudentModels = Model<TStudent, {}, StudentMethods>;
