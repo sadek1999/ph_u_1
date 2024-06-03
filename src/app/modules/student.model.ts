@@ -1,11 +1,17 @@
 import { Schema, model } from "mongoose";
-import { TGuardian, TLocalGuardian, TStudent, TUserName } from "./student/student.interface";
-
+import {
+  StudentMethods,
+  StudentModels,
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TUserName,
+} from "./student/student.interface";
 
 // Define the schemas
 const userNameSchema = new Schema<TUserName>({
   firstName: { type: String, required: true },
-  middleName: { type: String },
+  meddleName: { type: String },
   lastName: { type: String, required: true },
 });
 
@@ -24,13 +30,16 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   contact: { type: String, required: true },
 });
 
-const studentSchema = new Schema<TStudent>({
+const studentSchema = new Schema<TStudent, StudentModels, StudentMethods>({
   id: { type: String, required: true },
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ["male", "female"], required: true },
   email: { type: String, required: true },
   dateOfBarth: { type: String, required: true },
-  bloodGroup: { type: String, enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] },
+  bloodGroup: {
+    type: String,
+    enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+  },
   contactNO: { type: String, required: true },
   EmergencyContactNo: { type: String, required: true },
   presentAddress: { type: String, required: true },
@@ -38,9 +47,13 @@ const studentSchema = new Schema<TStudent>({
   guardian: { type: guardianSchema, required: true },
   localGuardian: { type: localGuardianSchema, required: true },
   profileImg: { type: String, required: true },
-  isActive: { type: String, enum: ['active', 'inActive'] },
+  isActive: { type: String, enum: ["active", "inActive"] },
 });
 
+studentSchema.methods.isUserExist=async function (id:string) {
+  const userExist =await Student.findOne({id})
+  return userExist;
+  
+}
 
-
-export  const studentModel=model<TStudent>('student',studentSchema)
+export const Student = model<TStudent ,StudentModels>("student", studentSchema);

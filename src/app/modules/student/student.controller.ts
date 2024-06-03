@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { studentService } from "./student.service";
+import studentValidationSchema from "./student.valiation";
 
 
 const createStudent=async(req :Request,res:Response)=>{
@@ -7,7 +8,10 @@ const createStudent=async(req :Request,res:Response)=>{
   try{
     const{student :studentData}=req.body;
     // will call service function
-    const result=await studentService.createStudentIntoDB(studentData);
+    
+
+    const zodparsedData=studentValidationSchema.parse(studentData);
+    const result=await studentService.createStudentIntoDB(zodparsedData);
 
     res.status(200).json({
         success:true,
@@ -15,10 +19,10 @@ const createStudent=async(req :Request,res:Response)=>{
         data:result
     })
   }
-  catch(err){
+  catch(err :any){
     res.status(500).json({
       success:false,
-      massage:'sumThing want wrong',
+      massage:err.massage || 'sumThing want wrong',
       error:err
     })
   }

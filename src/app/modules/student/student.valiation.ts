@@ -1,47 +1,63 @@
 import { Schema, model } from "mongoose";
-import { TGuardian, TLocalGuardian, TStudent, TUserName } from "./student.interface";
-import z from "zod"
+
+import z from "zod";
 
 
-// Define the schemas
+// Define the schema for TUserName
 const userNameValidationSchema = z.object({
-    firstName:z.string(),
-    middleName:z.string(),
-    lastName:z.string()
-    
-})
-
-const guardianSchema = z.object({
-  fatherName: z.string(),
-  fatherContact: z.string(),
-  fatherOccupation:z.string(),
-  motherName: z.string(),
-  motherContact: z.string(),
-  motherOccupation: z.string( ),
+  firstName: z.string().trim().min(1, "First name is required"),
+  middleName: z.string().trim().optional(),
+  lastName: z.string().trim().min(1, "Last name is required"),
 });
 
-const localGuardianSchema = new Schema<TLocalGuardian>({
-  name: { type: String, required: true },
-  address: { type: String, required: true },
-  contact: { type: String, required: true },
+// Define the schema for TGuardian
+const guardianValidationSchema = z.object({
+  fatherName: z.string().trim().min(1, "Father name is required"),
+  fatherContact: z
+    .string()
+    .trim()
+    .min(10, "Invalid father contact number")
+    .optional(),
+  fatherOccupation: z.string().trim(),
+  motherName: z.string().trim().min(1, "Mother name is required"),
+  motherContact: z
+    .string()
+    .trim()
+    .min(10, "Invalid mother contact number")
+    .optional(),
+  motherOccupation: z.string().trim(),
 });
 
-const studentSchema = new Schema<TStudent>({
-  id: { type: String, required: true },
-  name: { type: userNameSchema, required: true },
-  gender: { type: String, enum: ["male", "female"], required: true },
-  email: { type: String, required: true },
-  dateOfBarth: { type: String, required: true },
-  bloodGroup: { type: String, enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] },
-  contactNO: { type: String, required: true },
-  EmergencyContactNo: { type: String, required: true },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
-  guardian: { type: guardianSchema, required: true },
-  localGuardian: { type: localGuardianSchema, required: true },
-  profileImg: { type: String, required: true },
-  isActive: { type: String, enum: ['active', 'inActive'] },
+// Define the schema for TLocalGuardian
+const localGuardianValidationSchema = z.object({
+  name: z.string().trim().min(1, "Local guardian name is required"),
+  address: z.string().trim().min(1, "Local guardian address is required"),
+  contact: z
+    .string()
+    .trim()
+    .min(10, "Invalid local guardian contact number")
+    .optional(),
 });
 
+// Define the schema for TStudent
+const studentValidationSchema = z.object({
+  id: z.string().trim().min(1, "Student ID is required"), // Ensure valid UUID format
+  name: userNameValidationSchema,
+  gender: z.enum(["male", "female"]),
+  email: z.string().trim().email("Invalid email address"),
+  dateOfBarth: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date of birth format (YYYY-MM-DD)"), // Validate date format
+  bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
+  contactNO: z.string().trim().min(10, "Invalid contact number"),
+  EmergencyContactNo: z.string().trim().min(10, "Invalid emergency contact number"),
+  presentAddress: z.string().trim().min(1, "Present address is required"),
+  permanentAddress: z.string().trim().min(1, "Permanent address is required"),
+  guardian: guardianValidationSchema,
+  localGuardian: localGuardianValidationSchema,
+  profileImg: z.string().trim().url("Invalid profile image URL").optional(),
+  isActive: z.enum(["active", "inactive"]),
+});
 
-
+export default studentValidationSchema;
