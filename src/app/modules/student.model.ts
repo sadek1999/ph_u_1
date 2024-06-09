@@ -54,7 +54,17 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   profileImg: { type: String, required: true },
   isActive: { type: String, enum: ["active", "inActive"] },
   isDelated:{type:Boolean, default:false}
+},{
+  toJSON:{
+    virtuals:true
+  }
 });
+
+// virtual
+
+studentSchema.virtual('fullName').get(function(){
+  return `${this.name.firstName}  ${this.name.meddleName}  ${this.name.lastName}`
+})
 
 // Pre  mongoose hook
 
@@ -72,9 +82,22 @@ studentSchema.post("save", function (doc,next) {
   next()
 });
 
-studentSchema.pre("find",async function () {
-  console.log(this)
+studentSchema.pre("find",async function (next) {
+  
+  this.find({isDelated:{$ne:true}})
+  next()
 })
+
+studentSchema.pre('findOne',async function (next) {
+  this.find({isDelated:{$ne:true}})
+  next()
+})
+
+studentSchema.pre('aggregate',async function (next) {
+  this.pipeline().unshift({$match:{isDelated:{$ne:true}}})
+  next()
+})
+
 
 // creating a custom static
 
