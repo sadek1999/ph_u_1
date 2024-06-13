@@ -3,6 +3,7 @@ import config from "../../../config";
 import { TStudent } from "../student/student.interface";
 import {  TUser } from "./user.interface";
 import { User } from "./user.model";
+import { Student } from "../student.model";
 
 
 const createStudentIntoDB = async (password:string,studentData: TStudent) => {
@@ -15,18 +16,21 @@ const createStudentIntoDB = async (password:string,studentData: TStudent) => {
      userData.role='student'
      userData.id='2030100001'
   
-    const result = await User.create(userData);
+    const newUser = await User.create(userData);
 
-    if(Object.keys(result).length){
+    if(Object.keys(newUser).length){
         // set id and _id;
-        studentData.id = result.id;
-        studentData.user= result._id;
+        studentData.id =newUser.id;
+        studentData.user=newUser._id;
+
+        const newStudent=await Student.create(studentData);
+        return newStudent
     }
     // const student = new Student(studentData);
   
     // const result = await student.save();
   
-    return result;
+  
   };
 
   export const UserServices={

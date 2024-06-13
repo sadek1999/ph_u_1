@@ -1,35 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { studentService } from "./student.service";
 import studentValidationSchema from "./student.valiation";
 
 
-const createStudent=async(req :Request,res:Response)=>{
-            
-  try{
-    const{student :studentData}=req.body;
-    // will call service function
-    
 
-    const zodparsedData=studentValidationSchema.parse(studentData);
-    const result=await studentService.createStudentIntoDB(zodparsedData);
 
-    res.status(200).json({
-        success:true,
-        massage:'successfully create student',
-        data:result
-    })
-  }
-  catch(err :any){
-    res.status(500).json({
-      success:false,
-      massage:err.massage || 'sumThing want wrong',
-      error:err
-    })
-  }
-    
-}
-
-const getAllStudents=async(req:Request,res:Response)=>{
+const getAllStudents=async(req:Request,res:Response,next:NextFunction)=>{
   try{
     const result=await studentService.getAllStudentsFromDB()
 
@@ -40,15 +16,16 @@ const getAllStudents=async(req:Request,res:Response)=>{
   })
 
   }catch(err){
-    res.status(500).json({
-      success:false,
-      massage:'sumThink want wrong',
-      error:err
-    })
+    // res.status(500).json({
+    //   success:false,
+    //   massage:'sumThink want wrong',
+    //   error:err
+    // })
+    next(err)
   }
 }
 
-const getSingleStudent=async(req:Request,res:Response)=>{
+const getSingleStudent=async(req:Request,res:Response ,next:NextFunction)=>{
   try{
    const {studentId}=req.params ;
    const result=await studentService.getSingleStudentFromDB(studentId);
@@ -59,14 +36,15 @@ const getSingleStudent=async(req:Request,res:Response)=>{
     data:result
    })
   }catch(err :any){
-    res.status(500).json({
-      success:false,
-      massage:err.massage || 'sumThing want wrong',
-      error:err
-    })
+    // res.status(500).json({
+    //   success:false,
+    //   massage:err.massage || 'sumThing want wrong',
+    //   error:err
+    // })
+    next(err)
 }
 }
-const deleteSingleStudent=async(req:Request,res:Response)=>{
+const deleteSingleStudent=async(req:Request,res:Response ,next:NextFunction)=>{
   try{
     const{studentId}=req.params;
     const result =await studentService.delateStudentFromDB(studentId)
@@ -77,17 +55,18 @@ const deleteSingleStudent=async(req:Request,res:Response)=>{
       data:result
     })
   }catch(err:any){
-    res.status(500).json({
-      success:false,
-      massage:err.massage||'sumthink want wrong',
-      error:err
-    })
+    // res.status(500).json({
+    //   success:false,
+    //   massage:err.massage||'sumthink want wrong',
+    //   error:err
+    // })
+    next(err)
   }
 }
 
 
 export const studentControllers={
-    createStudent,
+    
     getAllStudents,
     getSingleStudent,
     deleteSingleStudent

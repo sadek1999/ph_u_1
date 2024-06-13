@@ -10,7 +10,8 @@ const app:Application = express()
 
 
 app.use("/api/v1/student",studentRoutes)
-app.use('/api/v1/user',UserRoutes)
+app.use("/api/v1/users",UserRoutes)
+// app.use('/api/v1/users',UserRoutes)
 
 app.get('/', (req :Request, res:Response ) => {
   res.send('Hello World!')

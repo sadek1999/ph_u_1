@@ -36,7 +36,8 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: true },
-  password: { type: String, required: true },
+  user:{type:Schema.Types.ObjectId , required:true,unique:true,ref:'User'},
+
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ["male", "female"], required: true },
   email: { type: String, required: true },
@@ -52,7 +53,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   guardian: { type: guardianSchema, required: true },
   localGuardian: { type: localGuardianSchema, required: true },
   profileImg: { type: String, required: true },
-  isActive: { type: String, enum: ["active", "inActive"] },
+  
   isDelated:{type:Boolean, default:false}
 },{
   toJSON:{
@@ -68,19 +69,19 @@ studentSchema.virtual('fullName').get(function(){
 
 // Pre  mongoose hook
 
-studentSchema.pre("save",async function (next) {
-  let  user=this;
-  user.password=await bcrypt.hash(user.password,Number(config.saltRound));
-  next()
-});
+// studentSchema.pre("save",async function (next) {
+//   let  user=this;
+//   user.password=await bcrypt.hash(user.password,Number(config.saltRound));
+//   next()
+// });
 
 // post mongoose hook/middleware
 
-studentSchema.post("save", function (doc,next) {
-  doc.password=''
-  console.log( "from post hook");
-  next()
-});
+// studentSchema.post("save", function (doc,next) {
+//   doc.password=''
+//   console.log( "from post hook");
+//   next()
+// });
 
 studentSchema.pre("find",async function (next) {
   

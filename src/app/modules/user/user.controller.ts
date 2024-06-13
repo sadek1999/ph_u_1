@@ -1,14 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserServices } from "./user.service";
 
 
-const createStudent=async(req :Request,res:Response)=>{
-            
+const createStudent=async(req :Request,res:Response,next:NextFunction)=>{
+       
     try{
       const{password,student :studentData}=req.body;
       // will call service function
       
-  
+ 
     //   const zodparsedData=studentValidationSchema.parse(studentData);
     //   const result=await studentService.createStudentIntoDB(zodparsedData);
     const result =await UserServices.createStudentIntoDB(password,studentData)
@@ -20,11 +20,7 @@ const createStudent=async(req :Request,res:Response)=>{
       })
     }
     catch(err :any){
-      res.status(500).json({
-        success:false,
-        massage:err.massage || 'sumThing want wrong',
-        error:err
-      })
+      next(err)
     }
       
   }
