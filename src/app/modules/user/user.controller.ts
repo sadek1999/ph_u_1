@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { UserServices } from "./user.service";
+import sendResponse from "../../utility/sandResponse";
+import httpStatus from "http-status";
 
 const createStudent = async (
   req: Request,
@@ -16,11 +18,18 @@ const createStudent = async (
       studentData
     );
 
-    res.status(200).json({
-      success: true,
-      massage: "successfully create student",
-      data: result,
-    });
+    // res.status(200).json({
+    //   success: true,
+    //   massage: "successfully create student",
+    //   data: result,
+    // });
+
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      massage:"successfully create student",
+      data:result
+    })
   } catch (err: any) {
     next(err);
   }

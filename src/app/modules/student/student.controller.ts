@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { studentService } from "./student.service";
+import sendResponse from "../../utility/sandResponse";
+import httpStatus from "http-status";
 
 
 const getAllStudents = async (
@@ -10,11 +12,12 @@ const getAllStudents = async (
   try {
     const result = await studentService.getAllStudentsFromDB();
 
-    res.status(200).json({
-      success: true,
-      massage: "successfully find all students",
-      data: result,
-    });
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      massage:"successfully create student",
+      data:result
+    })
   } catch (err) {
     next(err);
   }
@@ -29,11 +32,12 @@ const getSingleStudent = async (
     const { studentId } = req.params;
     const result = await studentService.getSingleStudentFromDB(studentId);
 
-    res.status(200).json({
-      success: true,
-      massage: "Get a student by Id",
-      data: result,
-    });
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      massage:"successfully create student",
+      data:result
+    })
   } catch (err: any) {
     next(err);
   }
@@ -47,10 +51,11 @@ const deleteSingleStudent = async (
     const { studentId } = req.params;
     const result = await studentService.delateStudentFromDB(studentId);
 
-    res.status(200).json({
-      success: true,
-      massage: "Delete student from DB",
-      data: result,
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      massage:"successfully create student",
+      data:result
     });
   } catch (err: any) {
     next(err);
