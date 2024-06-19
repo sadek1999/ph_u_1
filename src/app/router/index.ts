@@ -6,10 +6,21 @@ import { UserRoutes } from "../modules/user/user.route";
 
 const router= Router()
 
-router.use('/students',studentRoutes)
-router.use('/users',UserRoutes)
+const moduleRoutes=[
+    {
+        path:"/users",
+        route:UserRoutes
+    },
+    {
+      path:"/students",
+      route:studentRoutes
+    }
+]
 
-// app.use("/api/v1/student", studentRoutes);
-// app.use("/api/v1/users", UserRoutes);
+
+moduleRoutes.forEach((route)=>router.use(route.path,route.route))
+
+
+
 
 export default router
