@@ -1,7 +1,8 @@
-import { Schema, model } from "mongoose";
+
 
 import z from "zod";
-
+import { Date } from 'mongoose';
+import { Date } from 'mongoose';
 
 // Define the schema for TUserName
 const userNameValidationSchema = z.object({
@@ -40,26 +41,31 @@ const localGuardianValidationSchema = z.object({
 });
 
 // Define the schema for TStudent
-const studentValidationSchema = z.object({
-  id: z.string().trim().min(1, "Student ID is required"), // Ensure valid UUID format
-  password: z.string().trim().min(1, "Student ID is required"), 
-  name: userNameValidationSchema,
-  gender: z.enum(["male", "female"]),
-  email: z.string().trim().email("Invalid email address"),
-  dateOfBarth: z
-    .string()
-    .trim()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date of birth format (YYYY-MM-DD)"), // Validate date format
-  bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
-  contactNO: z.string().trim().min(10, "Invalid contact number"),
-  EmergencyContactNo: z.string().trim().min(10, "Invalid emergency contact number"),
-  presentAddress: z.string().trim().min(1, "Present address is required"),
-  permanentAddress: z.string().trim().min(1, "Permanent address is required"),
-  guardian: guardianValidationSchema,
-  localGuardian: localGuardianValidationSchema,
-  profileImg: z.string().trim().url("Invalid profile image URL").optional(),
-  isActive: z.enum(["active", "inactive"]),
-  isDelated:z.boolean()
+const createStudentValidationSchema = z.object({
+  body: z.object({
+    // Ensure valid UUID format
+    password: z.string().trim().min(1, "Student ID is required"),
+    student: z.object({
+      name: userNameValidationSchema,
+      gender: z.enum(["male", "female"]),
+      email: z.string().trim().email("Invalid email address"),
+      dateOfBarth: z.date(), // Validate date format
+      bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
+      contactNO: z.string().trim().min(10, "Invalid contact number"),
+      EmergencyContactNo: z
+        .string()
+        .trim()
+        .min(10, "Invalid emergency contact number"),
+      presentAddress: z.string().trim().min(1, "Present address is required"),
+      permanentAddress: z
+        .string()
+        .trim()
+        .min(1, "Permanent address is required"),
+      guardian: guardianValidationSchema,
+      localGuardian: localGuardianValidationSchema,
+      profileImg: z.string().trim().url("Invalid profile image URL").optional(),
+    }),
+  }),
 });
 
-export default studentValidationSchema;
+export default createStudentValidationSchema;

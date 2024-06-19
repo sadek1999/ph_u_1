@@ -1,13 +1,16 @@
-import { RequestHandler } from "express";
+
 import { UserServices } from "./user.service";
 import sendResponse from "../../utility/sandResponse";
 import httpStatus from "http-status";
+import catchAsync from "../../utility/catchAsync";
 
-const createStudent: RequestHandler = async (req, res, next) => {
-  try {
+
+
+const createStudent =catchAsync( async (req, res) => {
+ 
     const { password, student: studentData } = req.body;
 
-    //   const zodparsedData=studentValidationSchema.parse(studentData);
+   
     //   const result=await studentService.createStudentIntoDB(zodparsedData);
     const result = await UserServices.createStudentIntoDB(
       password,
@@ -20,10 +23,8 @@ const createStudent: RequestHandler = async (req, res, next) => {
       massage: "successfully create student",
       data: result,
     });
-  } catch (err: any) {
-    next(err);
-  }
-};
+ 
+})
 
 export const UserControllers = {
   createStudent,

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import bcrypt from "bcrypt";
+
 
 import {
   StudentModel,
@@ -8,8 +8,7 @@ import {
   TStudent,
   TUserName,
 } from "./student/student.interface";
-import config from "../../config";
-import { boolean } from "zod";
+
 
 
 // Define the schemas
@@ -41,7 +40,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ["male", "female"], required: true },
   email: { type: String, required: true },
-  dateOfBarth: { type: String, required: true },
+  dateOfBarth: { type: Date, required: true },
   bloodGroup: {
     type: String,
     enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],

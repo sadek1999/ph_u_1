@@ -1,15 +1,12 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+
 import { studentService } from "./student.service";
 import sendResponse from "../../utility/sandResponse";
 import httpStatus from "http-status";
+import catchAsync from "../../utility/catchAsync";
 
-const catchAsync = (fn: RequestHandler) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch((err) => next(err));
-  };
-};
 
-const getAllStudents: RequestHandler = catchAsync(async (req, res, next) => {
+
+const getAllStudents = catchAsync(async (req, res, ) => {
   const result = await studentService.getAllStudentsFromDB();
 
   sendResponse(res, {
@@ -20,7 +17,7 @@ const getAllStudents: RequestHandler = catchAsync(async (req, res, next) => {
   });
 });
 
-const getSingleStudent: RequestHandler = catchAsync(async (req, res, next) => {
+const getSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await studentService.getSingleStudentFromDB(studentId);
 
@@ -31,8 +28,8 @@ const getSingleStudent: RequestHandler = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
-const deleteSingleStudent: RequestHandler = catchAsync(
-  async (req, res, next) => {
+const deleteSingleStudent = catchAsync(
+  async (req, res) => {
     const { studentId } = req.params;
     const result = await studentService.delateStudentFromDB(studentId);
 
