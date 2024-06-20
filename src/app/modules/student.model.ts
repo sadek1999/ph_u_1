@@ -52,7 +52,7 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   guardian: { type: guardianSchema, required: true },
   localGuardian: { type: localGuardianSchema, required: true },
   profileImg: { type: String, required: true },
-  
+  admissionSemester:{type:Schema.Types.ObjectId, ref:'academicSemester'},
   isDelated:{type:Boolean, default:false}
 },{
   toJSON:{

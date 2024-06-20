@@ -3,6 +3,7 @@
 import z from "zod";
 import { Date } from 'mongoose';
 import { Date } from 'mongoose';
+import { academicSemester } from "../academicSemester/academicSemester.model";
 
 // Define the schema for TUserName
 const userNameValidationSchema = z.object({
@@ -64,6 +65,7 @@ const createStudentValidationSchema = z.object({
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
       profileImg: z.string().trim().url("Invalid profile image URL").optional(),
+      academicSemester:z.string()
     }),
   }),
 });
