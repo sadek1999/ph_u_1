@@ -39,8 +39,8 @@ const studentSchema = new Schema<TStudent, StudentModel>({
 
   name: { type: userNameSchema, required: true },
   gender: { type: String, enum: ["male", "female"], required: true },
-  email: { type: String, required: true },
-  dateOfBarth: { type: Date, required: true },
+  email: { type: String, required: true,unique:true },
+  dateOfBarth: { type: String, required: true },
   bloodGroup: {
     type: String,
     enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],

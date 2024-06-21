@@ -31,7 +31,7 @@ export type TGuardian = {
     name: TUserName;
     gender: 'male' | 'female';
     email: string;
-    dateOfBarth:Date;
+    dateOfBarth:string;
     contactNO: string;
     EmergencyContactNo: string;
     bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';

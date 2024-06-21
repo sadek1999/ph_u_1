@@ -50,7 +50,7 @@ const createStudentValidationSchema = z.object({
       name: userNameValidationSchema,
       gender: z.enum(["male", "female"]),
       email: z.string().trim().email("Invalid email address"),
-      dateOfBarth: z.date(), // Validate date format
+      dateOfBarth: z.string(), // Validate date format
       bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
       contactNO: z.string().trim().min(10, "Invalid contact number"),
       EmergencyContactNo: z
@@ -65,7 +65,7 @@ const createStudentValidationSchema = z.object({
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
       profileImg: z.string().trim().url("Invalid profile image URL").optional(),
-      academicSemester:z.string()
+      admissionSemester:z.string()
     }),
   }),
 });
