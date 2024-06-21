@@ -15,6 +15,15 @@ const academicSemesterSchema = new Schema<TAcademicSemester>({
   endMonth: { type: String, enum: months },
 },{timestamps:true});
 
+// const updateAcademicSemesterSchema=new Schema<TAcademicSemester>({
+//   name: { type: String, required: true ,enum:SemesterName, },
+//   code: { type: String, required: true ,enum:SemesterCode },
+//   year: { type: String, required: true },
+//   startMonth: { type: String, enum: months },
+//   endMonth: { type: String, enum: months },
+// },{timestamps:true
+// })
+
 academicSemesterSchema.pre('save',async function (next) {
   const isSemesterExists =await academicSemester.findOne({
     name:this.name,

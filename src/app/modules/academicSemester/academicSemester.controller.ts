@@ -38,8 +38,27 @@ const getSingleAcademicSemester=catchAsync(async(req,res)=>{
     })
 })
 
+
+
+const updateAcademicSemester=catchAsync(async(req,res)=>{
+    const {semesterId}=req.params;
+
+    const result=await academicSemesterServices.updateAcademicSemesterIntoDB(
+        semesterId,req.body);
+    // return result;
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        massage:'successfully update a semester',
+        data:result
+    });
+   
+})
+
 export const academicSemesterControllers={
     cerateAcademicSemester,
     getAllAcademicSemester,
-    getSingleAcademicSemester
+    getSingleAcademicSemester,
+    updateAcademicSemester
+    
 }
