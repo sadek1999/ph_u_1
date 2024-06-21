@@ -1,9 +1,7 @@
 
 
 import z from "zod";
-import { Date } from 'mongoose';
-import { Date } from 'mongoose';
-import { academicSemester } from "../academicSemester/academicSemester.model";
+
 
 // Define the schema for TUserName
 const userNameValidationSchema = z.object({

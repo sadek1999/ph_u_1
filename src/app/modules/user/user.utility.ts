@@ -9,16 +9,22 @@ const getLastStudent=async()=>{
                id:1,
                _id:0
           }
-     ).lean();
+     )
+     .sort({
+          createdAt:-1
+     })
+     .lean()
+     return lastStudent?.id?lastStudent.id.substring(4):undefined
+     ;
 }
 
 
 
-  export   const generateStudentId=(payload:TAcademicSemester)=>{
+  export   const generateStudentId=async(payload:TAcademicSemester)=>{
 
-     const currentId=(0).toString();
+     const currentId= await getLastStudent()||(0).toString();
      let incrementId= (Number(currentId) +1).toString().padStart(4,'0');
-     incrementId=`${payload.year}${payload.code}${incrementId}`;
+     incrementId=`${payload.year.substring(2)}${payload.code}${incrementId}`;
      return incrementId;
 
      }
