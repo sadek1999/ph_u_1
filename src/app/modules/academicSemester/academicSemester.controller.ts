@@ -27,7 +27,19 @@ const getAllAcademicSemester=catchAsync(async(req,res)=>{
     })
 })
 
+const getSingleAcademicSemester=catchAsync(async(req,res)=>{
+    const{semesterId}=req.params;
+    const result=await academicSemesterServices.getSingleSemesterFromDB(semesterId)
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        massage:'get single semester successfully',
+        data:result
+    })
+})
+
 export const academicSemesterControllers={
     cerateAcademicSemester,
-    getAllAcademicSemester
+    getAllAcademicSemester,
+    getSingleAcademicSemester
 }
