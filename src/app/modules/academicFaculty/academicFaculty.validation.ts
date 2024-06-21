@@ -7,7 +7,13 @@ const academicFacultyValidationSchema=z.object({
         invalid_type_error:'In valid Faculty name'
     })
 })
+const updateAcademicFacultyValidationSchema=z.object({
+    name:z.string({
+        invalid_type_error:'In valid Faculty name'
+    })
+})
 
 export const academicFacultyValidation={
     academicFacultyValidationSchema,
+    updateAcademicFacultyValidationSchema
 }
