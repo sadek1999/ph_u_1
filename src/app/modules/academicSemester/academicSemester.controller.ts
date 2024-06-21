@@ -16,6 +16,18 @@ sendResponse(res, {
   });
 })
 
+const getAllAcademicSemester=catchAsync(async(req,res)=>{
+    const result=await academicSemesterServices.getAllSemestersFromDB();
+
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        massage:'all semester get successfully',
+        data:result
+    })
+})
+
 export const academicSemesterControllers={
     cerateAcademicSemester,
+    getAllAcademicSemester
 }

@@ -11,4 +11,6 @@ router.post(
   academicSemesterControllers.cerateAcademicSemester
 );
 
+router.get('/',academicSemesterControllers.getAllAcademicSemester)
+
 export const semesterRouter = router;
