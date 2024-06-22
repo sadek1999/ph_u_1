@@ -3,6 +3,7 @@
 import z from "zod";
 
 
+
 // Define the schema for TUserName
 const userNameValidationSchema = z.object({
   firstName: z.string().trim().min(1, "First name is required"),
@@ -63,7 +64,8 @@ const createStudentValidationSchema = z.object({
       guardian: guardianValidationSchema,
       localGuardian: localGuardianValidationSchema,
       profileImg: z.string().trim().url("Invalid profile image URL").optional(),
-      admissionSemester:z.string()
+      admissionSemester:z.string(),
+      academicDepartment:z.string()
     }),
   }),
 });

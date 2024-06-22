@@ -9,13 +9,13 @@ const createAcademicDepartmentIntoDB=async(payload:TAcademicDepartment)=>{
 }
 
 const getAllAcademicDepartmentFromDB=async()=>{
-    const result=await academicDepartment.find();
+    const result=await academicDepartment.find().populate('academicFaculty');
     return result;
 }
 
 const getSingleAcademicDepartmentFromDB=async(id:string)=>{
   
-    const result=await academicDepartment.findById(id);
+    const result=await academicDepartment.findById(id).populate('academicFaculty');
     return result;
 }
 
