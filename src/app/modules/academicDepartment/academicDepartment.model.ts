@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { TAcademicDepartment } from "./academicDepartment.interface";
+import appError from "../../error/appError";
 
 const academicDepartmentSchema = new Schema<TAcademicDepartment>({
   name: { type: String, required: true, unique: true },
@@ -13,7 +14,7 @@ academicDepartmentSchema.pre('save',async function (next) {
     name:this.name
   })
   if(isDepartmentExist){
-    throw new Error('This Department is already exist')
+    throw new appError(404,'This Department is already exist')
   }
   next()
 

@@ -27,7 +27,12 @@ const getAllStudentsFromDB = async () => {
 
 const getSingleStudentFromDB = async (id: string) => {
   // const result = await Student.findOne({ id: id });
-  const result=await Student.aggregate([ {$match:{id:id}}])
+  const result=await Student.findById(id).populate('admissionSemester')
+  .populate({
+    path:'academicDepartment',
+    populate:{
+      path:"academicFaculty",
+    },})
   return result;
 };
 const delateStudentFromDB = async (id: string) => {
