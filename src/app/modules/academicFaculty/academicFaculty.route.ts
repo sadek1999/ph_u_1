@@ -12,7 +12,10 @@ router.post(
 );
 
 router.get("/", academicFacultyController.getAllAcademicFaculty);
-router.get("/:facultyId", academicFacultyController.getSingleAcademicFaculty);
+router.get('/:facultyId', academicFacultyController.getSingleAcademicFaculty);
+
+// router.get('/:semesterId',academicSemesterControllers.getSingleAcademicSemester)
+
 router.patch(
   "/:facultyId",
   ValidateRequest(

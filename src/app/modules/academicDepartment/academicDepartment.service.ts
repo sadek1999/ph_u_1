@@ -14,7 +14,8 @@ const getAllAcademicDepartmentFromDB=async()=>{
 }
 
 const getSingleAcademicDepartmentFromDB=async(id:string)=>{
-    const result=await academicDepartment.findById({id});
+  
+    const result=await academicDepartment.findById(id);
     return result;
 }
 
