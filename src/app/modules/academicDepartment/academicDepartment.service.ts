@@ -21,7 +21,7 @@ const getSingleAcademicDepartmentFromDB=async(id:string)=>{
 
 const updateSingleAcademicDepartmentFromDB=async(id:string,payload:Partial<TAcademicDepartment>)=>{
 
-    const result=await academicDepartment.updateOne({_id:id},payload,{new:true})
+    const result=await academicDepartment.findOneAndUpdate({_id:id},payload,{new:true})
     return result
 }
 
