@@ -41,6 +41,14 @@ const getSingleStudentFromDB = async (id: string) => {
     });
   return result;
 };
+
+const updateSingleStudentIntoDB=async(id:string,payload:Partial<TStudent>)=>{
+  
+  const result=await Student.findOneAndUpdate({id},payload)
+  return result
+  
+
+}
 const delateStudentFromDB = async (id: string) => {
 
  const session=await mongoose.startSession()
@@ -82,5 +90,6 @@ export const studentService = {
   createStudentIntoDB,
   getAllStudentsFromDB,
   getSingleStudentFromDB,
+  updateSingleStudentIntoDB,
   delateStudentFromDB,
 };
