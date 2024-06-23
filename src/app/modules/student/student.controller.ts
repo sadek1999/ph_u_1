@@ -24,12 +24,13 @@ const getSingleStudent = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully create student",
+    massage: "successfully get the student",
     data: result,
   });
 });
 const deleteSingleStudent = catchAsync(
   async (req, res) => {
+    // console.log(req.params)
     const { studentId } = req.params;
     const result = await studentService.delateStudentFromDB(studentId);
 

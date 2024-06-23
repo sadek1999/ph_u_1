@@ -1,5 +1,8 @@
 import { TStudent } from "./student.interface";
 import { Student } from "./../student.model";
+import mongoose from "mongoose";
+import appError from "../../error/appError";
+import httpStatus from "http-status";
 
 const createStudentIntoDB = async (payload: TStudent) => {
   if (await Student.isUserExist(payload.id)) {
@@ -15,29 +18,64 @@ const createStudentIntoDB = async (payload: TStudent) => {
 };
 
 const getAllStudentsFromDB = async () => {
-  const result = await Student.find().populate('admissionSemester')
-  .populate({
-    path:'academicDepartment',
-    populate:{
-      path:"academicFaculty",
-    }
-  });
+  const result = await Student.find()
+    .populate("admissionSemester")
+    .populate({
+      path: "academicDepartment",
+      populate: {
+        path: "academicFaculty",
+      },
+    });
   return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
   // const result = await Student.findOne({ id: id });
-  const result=await Student.findById(id).populate('admissionSemester')
-  .populate({
-    path:'academicDepartment',
-    populate:{
-      path:"academicFaculty",
-    },})
+  const result = await Student.findOne({id})
+    .populate("admissionSemester")
+    .populate({
+      path: "academicDepartment",
+      populate: {
+        path: "academicFaculty",
+      },
+    });
   return result;
 };
 const delateStudentFromDB = async (id: string) => {
-  const result = await Student.updateOne({ id },{isDelated:true});
-  return result;
+
+ const session=await mongoose.startSession()
+
+  try{
+    session.startTransaction()
+    const isDeletedStudent = await Student.findOneAndUpdate(
+      { id },
+       { isDeleted: true },
+      {new:true,session});
+ if(!isDeletedStudent){
+  throw new appError(httpStatus.BAD_REQUEST,'fail to delete Student')
+ }
+
+ const isDeletedUser=await Student.findOneAndUpdate(
+  {id},
+  {isDeleted:true},
+  {new:true,session}
+ )
+
+ if(!isDeletedUser){
+  throw new appError(httpStatus.BAD_REQUEST,'fail to delete User')
+ }
+
+ await session.commitTransaction()
+ await session.endSession()
+
+    return isDeletedStudent ;
+  }
+  catch(err){
+ await session.abortTransaction()
+ await session.endSession()
+  }
+
+  
 };
 
 export const studentService = {

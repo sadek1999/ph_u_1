@@ -56,8 +56,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     localGuardian: { type: localGuardianSchema, required: true },
     profileImg: { type: String, required: true },
     admissionSemester: { type: Schema.Types.ObjectId, ref: "academicSemester" },
-    academicDepartment: { type: Schema.Types.ObjectId, ref: "academicDepartment" },
-    isDelated: { type: Boolean, default: false },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: "academicDepartment",
+    },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     toJSON: {
@@ -73,17 +76,17 @@ studentSchema.virtual("fullName").get(function () {
 });
 
 studentSchema.pre("find", async function (next) {
-  this.find({ isDelated: { $ne: true } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 
 studentSchema.pre("findOne", async function (next) {
-  this.find({ isDelated: { $ne: true } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 
 studentSchema.pre("aggregate", async function (next) {
-  this.pipeline().unshift({ $match: { isDelated: { $ne: true } } });
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 
