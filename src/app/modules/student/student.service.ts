@@ -3,7 +3,7 @@ import { Student } from "./../student.model";
 import mongoose from "mongoose";
 import appError from "../../error/appError";
 import httpStatus from "http-status";
-import { object } from "zod";
+
 
 const createStudentIntoDB = async (payload: TStudent) => {
   if (await Student.isUserExist(payload.id)) {
@@ -18,7 +18,9 @@ const createStudentIntoDB = async (payload: TStudent) => {
   return result;
 };
 
-const getAllStudentsFromDB = async () => {
+const getAllStudentsFromDB = async (query:Record<string|undefined>) => {
+ 
+  
   const result = await Student.find()
     .populate("admissionSemester")
     .populate({
