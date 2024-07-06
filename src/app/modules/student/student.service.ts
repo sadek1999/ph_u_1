@@ -3,7 +3,7 @@ import { Student } from "./../student.model";
 import mongoose from "mongoose";
 import appError from "../../error/appError";
 import httpStatus from "http-status";
-
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createStudentIntoDB = async (payload: TStudent) => {
   if (await Student.isUserExist(payload.id)) {
@@ -18,9 +18,10 @@ const createStudentIntoDB = async (payload: TStudent) => {
   return result;
 };
 
-const getAllStudentsFromDB = async (query:Record<string|undefined>) => {
- 
-  
+const getAllStudentsFromDB = async (query: Record<string | undefined>) => {
+  // const studentQuery =new QueryBuilder( Student.find(),query).sort()
+
+  // const result= await studentQuery.modelQuery;
   const result = await Student.find()
     .populate("admissionSemester")
     .populate({
@@ -29,6 +30,7 @@ const getAllStudentsFromDB = async (query:Record<string|undefined>) => {
         path: "academicFaculty",
       },
     });
+  // console.log(result)
   return result;
 };
 
@@ -70,11 +72,11 @@ const updateSingleStudentIntoDB = async (
       modifiedData[`localGuardian .${key}`] = value;
     }
   }
-  
 
-  const result = await Student.findOneAndUpdate({ id }, 
-    modifiedData,{new:true,runValidators:true}
-  );
+  const result = await Student.findOneAndUpdate({ id }, modifiedData, {
+    new: true,
+    runValidators: true,
+  });
   return result;
 };
 const delateStudentFromDB = async (id: string) => {
