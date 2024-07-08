@@ -1,9 +1,10 @@
 import { TStudent } from "./student.interface";
-import { Student } from "./../student.model";
+import { Student } from "./student.model";
 import mongoose from "mongoose";
 import appError from "../../error/appError";
 import httpStatus from "http-status";
 import QueryBuilder from "../../builder/QueryBuilder";
+import { studentSearchableFields } from "./student.const";
 
 const createStudentIntoDB = async (payload: TStudent) => {
   if (await Student.isUserExist(payload.id)) {
@@ -19,18 +20,36 @@ const createStudentIntoDB = async (payload: TStudent) => {
 };
 
 const getAllStudentsFromDB = async (query: Record<string | undefined>) => {
-  // const studentQuery =new QueryBuilder( Student.find(),query).sort()
-
   // const result= await studentQuery.modelQuery;
-  const result = await Student.find()
-    .populate("admissionSemester")
-    .populate({
-      path: "academicDepartment",
-      populate: {
-        path: "academicFaculty",
-      },
-    });
-  // console.log(result)
+  // const result = await Student.find()
+  //   .populate("admissionSemester")
+  //   .populate({
+  //     path: "academicDepartment",
+  //     populate: {
+  //       path: "academicFaculty",
+  //     },
+  //   });
+  // // console.log(result)
+  // return result;
+
+  const studentQuery = new QueryBuilder(
+    Student.find()
+      .populate("admissionSemester")
+      .populate({
+        path: "academicDepartment",
+        populate: {
+          path: "academicFaculty",
+        },
+      }),
+    query
+  )
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await studentQuery.modelQuery;
   return result;
 };
 

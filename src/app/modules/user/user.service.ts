@@ -2,7 +2,7 @@ import config from "../../../config";
 import { TStudent } from "../student/student.interface";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-import { Student } from "../student.model";
+import { Student } from "../student/student.model";
 
 import { academicSemester } from "../academicSemester/academicSemester.model";
 import { generateStudentId } from "./user.utility";
@@ -43,10 +43,9 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     await session.endSession();
 
     return newStudent;
-  } 
-  catch (err) {
-    await session.abortTransaction()
-    await session.endSession()
+  } catch (err) {
+    await session.abortTransaction();
+    await session.endSession();
   }
 };
 
