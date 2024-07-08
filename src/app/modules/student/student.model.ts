@@ -9,11 +9,31 @@ import {
 } from "./student.interface";
 
 // Define the schemas
+//  export const userNameSchema = new Schema<TUserName>({
+//   firstName: { type: String, required: true },
+//   meddleName: { type: String },
+//   lastName: { type: String, required: true },
+// });
+
 const userNameSchema = new Schema<TUserName>({
-  firstName: { type: String, required: true },
-  meddleName: { type: String },
-  lastName: { type: String, required: true },
+  firstName: {
+    type: String,
+    required: [true, "name is required"],
+    trim: true,
+    maxlength: [20, "name can not more 20 characters"],
+  },
+  middleName:{
+    type:String,
+    trim:true,
+    maxlength:[20 ,'name cant more than 20 characters']
+  },
+  lastName:{
+    type:String,
+    required:[true,'name is required'],
+    maxlength:[20 ,'name cant more than 20 characters']
+  }
 });
+
 
 const guardianSchema = new Schema<TGuardian>({
   fatherName: { type: String, required: true },

@@ -2,10 +2,12 @@ import { Schema, model } from "mongoose";
 import { TAcademicDepartment } from "./academicDepartment.interface";
 import appError from "../../error/appError";
 
+
 const academicDepartmentSchema = new Schema<TAcademicDepartment>({
   name: { type: String, required: true, unique: true },
   academicFaculty: { type: Schema.Types.ObjectId, ref: "academicFaculty" },
 },{timestamps:true});
+
 
 
 academicDepartmentSchema.pre('save',async function (next) {
