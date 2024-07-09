@@ -1,0 +1,31 @@
+import httpStatus from "http-status";
+import catchAsync from "../../utility/catchAsync";
+import sendResponse from "../../utility/sandResponse";
+import { facultyServices } from "./faculty.service";
+
+
+const getAllFaculty=catchAsync(async(req,res)=>{
+    const result=await facultyServices.getAllFacultyFromDB(req.query)
+
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        massage:'successfully find all faculty',
+        data:result
+    })
+})
+const getSingleFaculty=catchAsync(async(req,res)=>{
+    const {facultyId}=req.params
+    const result=await facultyServices.getSingleFacultyFromDB(facultyId)
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        massage:'successfully get single Faculty',
+        data:result
+    })
+})
+
+export const facultyControllers={
+     getAllFaculty,
+     getSingleFaculty
+}
