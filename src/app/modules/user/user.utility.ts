@@ -1,4 +1,4 @@
-
+import { number } from "zod";
 import { TAcademicSemester } from "../academicSemester/academicSemeste.interface";
 import { User } from "./user.model";
 
@@ -69,19 +69,49 @@ const getLastFaculty = async () => {
     .lean();
   return lastFaculty?.id ? lastFaculty.id : undefined;
 };
- export const generateFacultyId=async()=>{
+export const generateFacultyId = async () => {
+  let createdId = (0).toString();
 
-  let createdId=(0).toString();
+  const lastFacultyId = await getLastFaculty();
 
-  const lastFacultyId=await getLastFaculty();
+  if (lastFacultyId) {
+    createdId = lastFacultyId.substring(2);
+  }
 
-  if(lastFacultyId){
-    
-    createdId=lastFacultyId.substring(2)
-  } 
+  let incrementId = (Number(createdId) + 1).toString().padStart(4, "0");
 
-  let incrementId=(Number(createdId)+1).toString().padStart(4,'0')
+  incrementId = `F-${incrementId}`;
+  return incrementId;
+};
+const getLastAdmin = async () => {
+  const lastAdmin = await User.findOne(
+    {
+      role: "Admin",
+    },
+    {
+      id: 1,
+      _id: 0,
+    }
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+  return lastAdmin?.id ? lastAdmin.id : undefined;
+};
+export const generateAdminId = async () => {
+  let createdId = (0).toString();
 
-  incrementId=`F-${incrementId}`
-  return incrementId
-}
+  const lastAdminId = await getLastAdmin();
+
+  if (lastAdminId) {
+    createdId = lastAdminId.substring(2);
+  }
+
+  let incrementId = (Number(createdId) + 1).toString().padStart(4, "0");
+
+  incrementId = `A-${incrementId}`;
+  return incrementId;
+};
+
+
