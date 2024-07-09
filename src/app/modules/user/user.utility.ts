@@ -1,3 +1,4 @@
+
 import { TAcademicSemester } from "../academicSemester/academicSemeste.interface";
 import { User } from "./user.model";
 
@@ -39,3 +40,30 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
   incrementId = `${payload.year}${payload.code}${incrementId}`;
   return incrementId;
 };
+
+const getLastFaculty=async()=>{
+  const lastFaculty=await User.findOne(
+    {
+      role:'faculty',
+
+    },{
+      id:1,
+      _id:0
+    }
+  ).sort({createAt:-1}).lean();
+  return lastFaculty?.id?lastFaculty.id:undefined;
+}
+ export const generateFacultyId=async()=>{
+
+  let createdId=(0).toString();
+
+  const lastFacultyId=await getLastFaculty();
+  if(lastFacultyId){
+    createdId=lastFacultyId.substring(2)
+  } 
+
+  let incrementId=(Number(createdId)+1).toString().padStart(4,'0')
+
+  incrementId=`F-${incrementId}`
+  return incrementId
+}
