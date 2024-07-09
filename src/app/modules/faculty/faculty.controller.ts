@@ -4,6 +4,7 @@ import sendResponse from "../../utility/sandResponse";
 import { facultyServices } from "./faculty.service";
 
 
+
 const getAllFaculty=catchAsync(async(req,res)=>{
     const result=await facultyServices.getAllFacultyFromDB(req.query)
 
@@ -25,7 +26,32 @@ const getSingleFaculty=catchAsync(async(req,res)=>{
     })
 })
 
+const deleteSingleFaculty=catchAsync(async(req,res)=>{
+    const {facultyId}=req.params
+    const result=await facultyServices.deleteFacultyFromDB(facultyId)
+    sendResponse(res,{
+        statusCode:httpStatus.OK,
+        success:true,
+        massage:'successfully Delete Faculty ',
+        data:result
+    })
+})
+
+const updateFaculty=catchAsync(async(req,res)=>{
+    const {facultyID}=req.params
+    // console.log(req.params,facultyId)
+    const result=await facultyServices.updateFacultyIntoDB( facultyID,req.body)
+   sendResponse(res,{
+    statusCode:httpStatus.OK,
+    success:true,
+    massage:'successfully update Faculty',
+    data:result
+   })
+})
+
 export const facultyControllers={
      getAllFaculty,
-     getSingleFaculty
+     getSingleFaculty,
+     deleteSingleFaculty,
+     updateFaculty
 }

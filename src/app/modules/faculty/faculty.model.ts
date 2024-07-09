@@ -95,6 +95,15 @@ const facultySchema = new Schema<TFaculty, FacultyModel>(
   },
 );
 
+userNameSchema.virtual('fullName').get(function(){
+  return `${this.firstName}${this.middleName}${this.lastName}`;
+})
+
+facultySchema.pre('find',async function (next) {
+  this.find({isDeleted:{$ne:true}})
+  next()
+})
+
 facultySchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Faculty.findOne({ id });
   return existingUser;
