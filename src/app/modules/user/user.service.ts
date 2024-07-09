@@ -13,7 +13,6 @@ import { TFaculty } from "../faculty/faculty.interface";
 import { academicDepartment } from "../academicDepartment/academicDepartment.model";
 import { Faculty } from "../faculty/faculty.model";
 
-
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {};
 
@@ -53,97 +52,49 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   }
 };
 
-
-const createFacultyIntoDB=async(password:string,payload:TFaculty)=>{
-  const userData:Partial<TUser>={}
-  userData.role='Faculty';
-  userData.password=password||(config.default_password as string)
-  
-  const AcademicDepartment=await academicDepartment.findById(payload.academicDepartment)
-  if(!AcademicDepartment){
-    throw new appError(400,'academic Department is not found')
-  }
-
-  userData.id=await generateFacultyId()
-
-  const newUser=await User.create([userData])
-  // console.log(newUser)
-  if(!newUser.length){
-    throw new appError(httpStatus.BAD_REQUEST,'Field to create user')
-  }
-
-  payload.id=newUser[0].id;
-  payload.user=newUser[0]._id;
-
-  const newFaculty =await Faculty.create([payload])
-  if(!newFaculty.length){
-    throw new appError(httpStatus.BAD_REQUEST,"Field to create Faculty")
-  }
-  
-  return newFaculty
-  
-
-
-}
-
-
-const createFacultyIntoDB1 = async (password: string, payload: TFaculty) => {
-  // create a user object
+const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   const userData: Partial<TUser> = {};
-
-  //if password is not given , use deafult password
+  userData.role = "Faculty";
   userData.password = password || (config.default_password as string);
 
-  //set student role
-  // userData.role = 'faculty';
-
-  // find academic department info
   const AcademicDepartment = await academicDepartment.findById(
-    payload.academicDepartment,
+    payload.academicDepartment
   );
-
   if (!AcademicDepartment) {
-    throw new AppError(400, 'Academic department not found');
+    throw new appError(400, "academic Department is not found");
   }
 
-  // const session = await mongoose.startSession();
-
+  const session = await mongoose.startSession();
   try {
-    // session.startTransaction();
-    //set  generated id
+    session.startTransaction();
     userData.id = await generateFacultyId();
 
-    // create a user (transaction-1)
-    const newUser = await User.create(userData); // array
-
-    //create a faculty
+    const newUser = await User.create([userData], { session });
+    // console.log(newUser)
     if (!newUser.length) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
+      throw new appError(httpStatus.BAD_REQUEST, "Field to create user");
     }
-    // set id , _id as user
+
     payload.id = newUser[0].id;
-    payload.user = newUser[0]._id; //reference _id
+    payload.user = newUser[0]._id;
 
-    // create a faculty (transaction-2)
-
-    const newFaculty = await Faculty.create(payload);
-
+    const newFaculty = await Faculty.create([payload], { session });
     if (!newFaculty.length) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create faculty');
+      throw new appError(httpStatus.BAD_REQUEST, "Field to create Faculty");
     }
-
-    // await session.commitTransaction();
-    // await session.endSession();
-
+    await session.commitTransaction();
+    await session.endSession();
     return newFaculty;
   } catch (err: any) {
-    // await session.abortTransaction();
-    // await session.endSession();
+    await session.abortTransaction();
+    await session.endSession();
     throw new Error(err);
   }
 };
 
+
+
 export const UserServices = {
   createStudentIntoDB,
-  createFacultyIntoDB
+  createFacultyIntoDB,
 };
