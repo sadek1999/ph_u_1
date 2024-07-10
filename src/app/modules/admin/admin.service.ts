@@ -4,6 +4,7 @@ import { Admin } from "./admin.model";
 import appError from "../../error/appError";
 import httpStatus from "http-status";
 import { User } from "../user/user.model";
+import { TAdmin } from "./admin.interface";
 
 
 const getAllAdminFromDB = async () => {
@@ -48,8 +49,29 @@ const deleteAdminFromDB = async (id: string) => {
   }
 };
 
+const updateAdminIntoDB = async (id: string, payload: Partial<TAdmin>) => {
+  const { name, ...remainingAdminData } = payload;
+
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingAdminData,
+  };
+
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modifiedUpdatedData[`name.${key}`] = value;
+    }
+  }
+
+  const result = await Admin.findByIdAndUpdate(id, modifiedUpdatedData, {
+    new: true,
+    runValidators: true,
+  });
+  return result;
+};
+
 export const adminServices = {
   getAllAdminFromDB,
   getSingleAdminFromDB,
-  deleteAdminFromDB
+  deleteAdminFromDB,
+  updateAdminIntoDB
 };
