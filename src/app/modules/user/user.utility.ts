@@ -1,4 +1,4 @@
-import { number } from "zod";
+
 import { TAcademicSemester } from "../academicSemester/academicSemeste.interface";
 import { User } from "./user.model";
 
