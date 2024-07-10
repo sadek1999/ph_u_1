@@ -5,6 +5,12 @@ const getAllAdminFromDB=async()=>{
     return result
 }
 
+const getSingleAdminFromDB=async(id:string)=>{
+    const result= await Admin.findById(id);
+    return result;
+}
+
 export const adminServices={
     getAllAdminFromDB,
+    getSingleAdminFromDB
 }
