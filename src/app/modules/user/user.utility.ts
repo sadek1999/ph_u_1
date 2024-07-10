@@ -86,7 +86,7 @@ export const generateFacultyId = async () => {
 const getLastAdmin = async () => {
   const lastAdmin = await User.findOne(
     {
-      role: "Admin",
+      role: "admin",
     },
     {
       id: 1,

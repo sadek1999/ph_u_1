@@ -122,6 +122,7 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     }
     await session.commitTransaction();
     await session.endSession();
+    return newAdmin;
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
