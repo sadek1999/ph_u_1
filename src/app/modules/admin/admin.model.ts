@@ -110,6 +110,11 @@ const userNameSchema = new Schema<TUserName>({
     this.find({ isDeleted: { $ne: true } });
     next();
   });
+
+  adminSchema.pre('aggregate', function (next) {
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+    next();
+  });
   
   adminSchema.statics.isUserExists = async function (id: string) {
     const existingUser = await Admin.findOne({ id });
