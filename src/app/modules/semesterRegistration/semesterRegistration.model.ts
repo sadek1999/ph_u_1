@@ -8,7 +8,7 @@ import { SemesterRegistrationStatus } from "./semesterRegistration.const";
       type: Schema.Types.ObjectId,
       required: true,
       unique: true,
-      ref: "AcademicSemester",
+      ref: "academicSemester",
     },
     status: {
       type: String,
