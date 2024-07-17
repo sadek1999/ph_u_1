@@ -8,7 +8,7 @@ export type TOfferedCourse={
     academicFaculty:Types.ObjectId;
     academicSemester:Types.ObjectId;
     course:Types.ObjectId;
-    Faculty:Types.ObjectId;
+    faculty:Types.ObjectId;
     maxCapacity:number;
     section:number;
     days:TDays[];

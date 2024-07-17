@@ -4,7 +4,7 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { Student } from "../student/student.model";
 
-import { academicSemester } from "../academicSemester/academicSemester.model";
+import { AcademicSemester } from "../academicSemester/academicSemester.model";
 import {
   generateAdminId,
   generateFacultyId,
@@ -14,7 +14,7 @@ import mongoose from "mongoose";
 import appError from "../../error/appError";
 import httpStatus from "http-status";
 import { TFaculty } from "../faculty/faculty.interface";
-import { academicDepartment } from "../academicDepartment/academicDepartment.model";
+import { AcademicDepartment } from "../academicDepartment/academicDepartment.model";
 import { Faculty } from "../faculty/faculty.model";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.model";
@@ -26,7 +26,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   userData.role = "student";
   //  userData.id='2564348'
 
-  const admissionSemester = await academicSemester.findById(
+  const admissionSemester = await AcademicSemester.findById(
     payload.admissionSemester
   );
   const session = await mongoose.startSession();
@@ -63,7 +63,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   userData.role = "Faculty";
   userData.password = password || (config.default_password as string);
 
-  const AcademicDepartment = await academicDepartment.findById(
+  const AcademicDepartment = await AcademicDepartment.findById(
     payload.academicDepartment
   );
   if (!AcademicDepartment) {
