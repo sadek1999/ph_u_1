@@ -6,7 +6,7 @@ export type TOfferedCourse={
     semesterRegistration:Types.ObjectId,
     academicDepartment:Types.ObjectId;
     academicFaculty:Types.ObjectId;
-    academicSemester:Types.ObjectId;
+    academicSemester?:Types.ObjectId;
     course:Types.ObjectId;
     faculty:Types.ObjectId;
     maxCapacity:number;
@@ -16,3 +16,8 @@ export type TOfferedCourse={
     endTime:string
 
 }
+export type TSchedule = {
+    days: TDays[];
+    startTime: string;
+    endTime: string;
+  };
