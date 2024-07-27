@@ -12,7 +12,7 @@ const createSemesterRegistration = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully create SemesterRegistration",
+    message: "successfully create SemesterRegistration",
     data: result,
   });
 });
@@ -25,7 +25,7 @@ const getAllSemesterRegistration = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully get all semester Registration",
+    message: "successfully get all semester Registration",
     data: result,
   });
 });
@@ -37,7 +37,7 @@ const getSingleSemesterRegistration = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully get single semester",
+    message: "successfully get single semester",
     data: result,
   });
 });
@@ -50,12 +50,12 @@ const updateSemesterRegistration = catchAsync(async (req, res) => {
       req.body
     );
 
-    sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      massage:'successfully update semesterRegistration',
-      data:result
-    })
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "successfully update semesterRegistration",
+    data: result,
+  });
 });
 
 export const semesterRegistrationController = {

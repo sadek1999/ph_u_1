@@ -11,7 +11,7 @@ const creteAcademicFaculty = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully create academicFaculty",
+    message: "successfully create academicFaculty",
     data: result,
   });
 });
@@ -21,21 +21,21 @@ const getAllAcademicFaculty = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully get all faculty",
+    message: "successfully get all faculty",
     data: result,
   });
 });
 
 const getSingleAcademicFaculty = catchAsync(async (req, res) => {
   const { facultyId } = req.params;
-  
+
   const result = await academicFacultyServices.getSingleAcademicFacultyFromDB(
     facultyId
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully get a single academicFaculty",
+    message: "successfully get a single academicFaculty",
     data: result,
   });
 });
@@ -50,7 +50,7 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    massage: "successfully update faculty",
+    message: "successfully update faculty",
     data: result,
   });
 });
