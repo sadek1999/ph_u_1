@@ -7,7 +7,7 @@ import  bcrypt  from 'bcrypt';
 
 
 const LoginUser= async(payload:TLoginUser)=>{
-    console.log(payload)
+    // console.log(payload)
     const {id}=payload;
 
     const isUserExist=await User.findOne({id})
