@@ -7,28 +7,30 @@ import  bcrypt  from 'bcrypt';
 
 
 const LoginUser= async(payload:TLoginUser)=>{
-    // console.log(payload)
+    console.log(payload)
     const {id}=payload;
 
-    const isUserExist=await User.findOne({id})
-    // console.log(isUserExist)
-    if(!isUserExist){
-      throw new appError(httpStatus.NOT_FOUND,'This user is not found !!')
-    }
-    // console.log(isUserExist?.isDeleted)
+    console.log(await User.isUserExistsByCustomId(id))
 
-     if(isUserExist?.isDeleted){
-      throw new appError(httpStatus.NOT_FOUND,'This user already Deleted')
-    }
-    if(isUserExist?.status==="block"){
-      throw new appError(httpStatus.FORBIDDEN,'This user block ')
-    }
+    // const isUserExist=await User.findOne({id})
+    // // console.log(isUserExist)
+    // if(!isUserExist){
+    //   throw new appError(httpStatus.NOT_FOUND,'This user is not found !!')
+    // }
+    // // console.log(isUserExist?.isDeleted)
 
-    const passwordCheck=await bcrypt.compare(payload?.password,isUserExist?.password)
+    //  if(isUserExist?.isDeleted){
+    //   throw new appError(httpStatus.NOT_FOUND,'This user already Deleted')
+    // }
+    // if(isUserExist?.status==="block"){
+    //   throw new appError(httpStatus.FORBIDDEN,'This user block ')
+    // }
 
-    if(!passwordCheck){
-      throw new appError(httpStatus.BAD_REQUEST,'password can not match')
-    }
+    // const passwordCheck=await bcrypt.compare(payload?.password,isUserExist?.password)
+
+    // if(!passwordCheck){
+    //   throw new appError(httpStatus.BAD_REQUEST,'password can not match')
+    // }
     
     return null;
 }

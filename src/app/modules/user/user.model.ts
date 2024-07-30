@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
-import { TUser, UserModel } from "./user.interface";
+
 import config from "../../../config";
 import bcrypt from "bcrypt";
+import { TUser, UserModel } from "./user.interface";
 
 const userSchema = new Schema<TUser,UserModel>(
   {
@@ -32,9 +33,13 @@ userSchema.post("save", function (doc, next) {
 
   next();
 });
-userSchema.static.isUserExistsByCustomId=async function (id:string){
- return await User.findOne({id})
-}
+// userSchema.static.isUserExistsByCustomId=async function (id:string){
+//  return await User.findOne({id})
+// }
+// userSchema.static.isUserExistsByCustomId=async function (id:string) {
+  
+// }
+
 
 
 export const User = model<TUser ,UserModel>("User", userSchema);
