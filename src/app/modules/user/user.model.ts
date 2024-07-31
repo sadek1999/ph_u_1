@@ -33,9 +33,16 @@ userSchema.post("save", function (doc, next) {
 
   next();
 });
-// userSchema.static.isUserExistsByCustomId=async function (id:string){
-//  return await User.findOne({id})
-// }
+userSchema.statics.isUserExistsByCustomId=async function (id:string){
+ return await User.findOne({id})
+}
+
+userSchema.statics.isPasswordMatch=async function (plainPassword:string,hashPassword:string) {
+  
+ 
+  return await bcrypt.compare(plainPassword,hashPassword)
+  // await bcrypt.compare(payload.password, user.password)
+}
 // userSchema.static.isUserExistsByCustomId=async function (id:string) {
   
 // }

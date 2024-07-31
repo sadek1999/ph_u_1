@@ -17,4 +17,5 @@ export interface  TUser {
   
   export interface UserModel extends Model<TUser> {
     isUserExistsByCustomId(id: string): Promise<TUser|null>;
+    isPasswordMatch(plainPassword:string,hashPassword:string):Promise<boolean>;
   }
