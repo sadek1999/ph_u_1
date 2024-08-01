@@ -4,10 +4,10 @@ import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
 import jwt from "jsonwebtoken";
 import config from "../../../config";
-import  bcrypt  from 'bcrypt';
+
 
 const LoginUser = async (payload: TLoginUser) => {
-  console.log(payload);
+  // console.log(payload);
   const { id } = payload;
 
   const user = await User.isUserExistsByCustomId(id);
@@ -26,8 +26,8 @@ const LoginUser = async (payload: TLoginUser) => {
     throw new appError(httpStatus.FORBIDDEN, "This user block ");
   }
   // const match = await bcrypt.compare(payload.password, user.password);
-  const match =await User.isPasswordMatch(payload?.password, user?.password)
-  console.log(match)
+  // const match =await User.isPasswordMatch(payload?.password, user?.password)
+  // console.log(match)
 
 
   if (!(await User.isPasswordMatch(payload?.password, user?.password))) {
@@ -40,7 +40,7 @@ const LoginUser = async (payload: TLoginUser) => {
   const accessToken = jwt.sign(
     jsonPayload,
     config.jwt_access_secret as string,
-    { expiresIn: "10d" }
+    { expiresIn: '24h' }
   );
 
   return {
