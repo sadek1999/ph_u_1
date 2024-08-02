@@ -7,6 +7,7 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { studentSearchableFields } from "./student.const";
 
 const createStudentIntoDB = async (payload: TStudent) => {
+  // console.log(payload)
   if (await Student.isUserExist(payload.id)) {
     throw new Error("your are alrady Exists");
   }

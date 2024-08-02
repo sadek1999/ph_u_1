@@ -6,12 +6,14 @@ import express from "express";
 import { createStudentValidationSchema } from "../student/student.valiation";
 import { createFacultyValidationSchema } from "../faculty/faculty.validation";
 import { createAdminValidationSchema } from "../admin/admin.validation";
+import auth from "../middlewares/auth";
+import { USER_ROLE } from "./user.const";
 
 const router = express.Router();
 // console.log('this is user router')
 
 router.post(
-  "/create-student",
+  "/create-student",auth(USER_ROLE.admin),
   ValidateRequest(createStudentValidationSchema),
   UserControllers.createStudent
 );

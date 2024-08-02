@@ -3,10 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../utility/catchAsync";
 import appError from "../../error/appError";
 import httpStatus from "http-status";
-import jwt, { decode, JwtPayload } from "jsonwebtoken";
+import jwt, {  JwtPayload } from "jsonwebtoken";
 import config from "../../../config";
+import { TUserRole } from "../user/user.interface";
 
-const auth = () => {
+const auth = (...requiredRoles :TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     //   validation
     const token = req.headers.authorization;
@@ -26,8 +27,15 @@ const auth = () => {
           );
         }
         // err
+        const role=(decoded as JwtPayload).role 
+        if(requiredRoles && !requiredRoles.includes(role)){
+            throw new appError(
+                httpStatus.UNAUTHORIZED,
+                "you are unauthorize user"
+              );  
+        }
         req.user=decoded as JwtPayload
-        // console.log(decoded);
+        console.log(decoded);
         // decoded undefined
         next();
       }

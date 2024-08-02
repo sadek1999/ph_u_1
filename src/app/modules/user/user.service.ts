@@ -22,6 +22,7 @@ import { AcademicDepartment } from "../academicDepartment/academicDepartment.mod
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {};
+  // console.log(payload)
 
   userData.password = password || (config.default_password as string);
   userData.role = "student";
@@ -31,6 +32,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   const admissionSemester = await AcademicSemester.findById(
     payload.admissionSemester
   );
+  
   if(!admissionSemester){
     throw new appError(httpStatus.NOT_FOUND,'the admissionSemester is invalid')
   }
@@ -43,19 +45,20 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     userData.id = await generateStudentId(admissionSemester);
 
     const newUser = await User.create([userData], { session });
-   
+    console.log(newUser)
     if (!newUser.length) {
       throw new appError(httpStatus.BAD_REQUEST, "Fail to create user");
     }
     // set id and _id;
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
-
+console.log('test')
     const newStudent = await Student.create([payload], { session });
-   
+  
     if (!newStudent) {
       throw new appError(httpStatus.BAD_REQUEST, "fail to create student");
     }
+    console.log('test-2')
     await session.commitTransaction();
     await session.endSession();
 

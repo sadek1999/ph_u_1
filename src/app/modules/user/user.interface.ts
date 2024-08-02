@@ -1,4 +1,5 @@
 import { Model } from "mongoose";
+import { USER_ROLE } from "./user.const";
 
 export interface  TUser {
     id: string;
@@ -14,6 +15,8 @@ export interface  TUser {
     role: string;
     id: string;
   };
+
+ export type TUserRole=keyof typeof USER_ROLE
   
   export interface UserModel extends Model<TUser> {
     isUserExistsByCustomId(id: string): Promise<TUser|null>;
