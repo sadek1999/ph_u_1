@@ -2,11 +2,12 @@
 import  express  from 'express';
 import { facultyControllers } from './faculty.controller';
 import auth from '../middlewares/auth';
+import { USER_ROLE } from '../user/user.const';
 
 const router=express.Router();
 
 router.get('/', auth(),facultyControllers.getAllFaculty)
-router.get("/:facultyId",facultyControllers.getSingleFaculty)
-router.delete('/:facultyId',facultyControllers.deleteSingleFaculty)
-router.patch('/:facultyID',facultyControllers.updateFaculty)
+router.get("/:facultyId",auth(),facultyControllers.getSingleFaculty)
+router.delete('/:facultyId',auth(USER_ROLE.admin),facultyControllers.deleteSingleFaculty)
+router.patch('/:facultyID',auth(),facultyControllers.updateFaculty)
 export const FacultyRouter= router

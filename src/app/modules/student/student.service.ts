@@ -9,7 +9,7 @@ import { studentSearchableFields } from "./student.const";
 const createStudentIntoDB = async (payload: TStudent) => {
   // console.log(payload)
   if (await Student.isUserExist(payload.id)) {
-    throw new Error("your are alrady Exists");
+    throw new Error("your are already Exists");
   }
 
   const result = await Student.create(payload);
