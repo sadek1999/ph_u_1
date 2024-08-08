@@ -8,7 +8,7 @@ import { USER_ROLE } from "../user/user.const";
 const router = express.Router();
 
 // router.post('/crate-student',studentControllers.createStudent)
-router.get("/",auth(), studentControllers.getAllStudents);
+router.get("/", studentControllers.getAllStudents);
 router.get("/:studentId", auth(),studentControllers.getSingleStudent);
 router.patch(
   "/:studentId",auth(),
