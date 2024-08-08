@@ -7,3 +7,9 @@ export const LoginUserValidation=z.object({
         password:z.string({required_error:"passWord is Required "})
     })
 })
+export const ChangeLoginPasswordUserValidation=z.object({
+    body:z.object({
+       OldPassword:z.string({required_error:" Old passWord is Required "}),
+        newPassword:z.string({required_error:"new passWord is Required "})
+    })
+})
