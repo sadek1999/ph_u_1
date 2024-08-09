@@ -7,7 +7,7 @@ import { TUser, UserModel } from "./user.interface";
 const userSchema = new Schema<TUser,UserModel>(
   {
     id: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select:0 },
     needsPasswordChange: { type: Boolean, default: true },
     role: { type: String, enum: ["admin", "student", "Faculty"] },
     status: {
@@ -34,7 +34,7 @@ userSchema.post("save", function (doc, next) {
   next();
 });
 userSchema.statics.isUserExistsByCustomId=async function (id:string){
- return await User.findOne({id})
+ return await User.findOne({id}).select('+password')
 }
 
 userSchema.statics.isPasswordMatch=async function (plainPassword:string,hashPassword:string) {
