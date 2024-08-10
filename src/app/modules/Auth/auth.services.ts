@@ -82,6 +82,7 @@ const changePassword = async (
   },{
      password:newHashPassword,
      needsPasswordChange:false,
+     passwordChangeDate:new Date()
   })
 
   return result  

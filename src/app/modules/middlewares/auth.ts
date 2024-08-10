@@ -16,30 +16,45 @@ const auth = (...requiredRoles :TUserRole[]) => {
     }
     // Verified Token
 
-    jwt.verify(
-      token,
-      config.jwt_access_secret as string,
-      function (err, decoded) {
-        if (err) {
-          throw new appError(
-            httpStatus.UNAUTHORIZED,
-            "you are unauthorize user"
-          );
-        }
-        // err
-        const role=(decoded as JwtPayload).role 
+      const decoded = jwt.verify(token,
+        config.jwt_access_secret as string) as JwtPayload;
+        const role=decoded .role 
         if(requiredRoles && !requiredRoles.includes(role)){
             throw new appError(
                 httpStatus.UNAUTHORIZED,
                 "you are unauthorize user"
               );  
         }
-        req.user=decoded as JwtPayload
+        req.user=decoded 
         // console.log(decoded);
         // decoded undefined
         next();
-      }
-    );
+    
+
+    // jwt.verify(
+    //   token,
+    //   config.jwt_access_secret as string,
+    //   function (err, decoded) {
+    //     // if (err) {
+    //     //   throw new appError(
+    //     //     httpStatus.UNAUTHORIZED,
+    //     //     "you are unauthorize user"
+    //     //   );
+    //     // }
+    //     // err
+    //     const role=(decoded as JwtPayload).role 
+    //     if(requiredRoles && !requiredRoles.includes(role)){
+    //         throw new appError(
+    //             httpStatus.UNAUTHORIZED,
+    //             "you are unauthorize user"
+    //           );  
+    //     }
+    //     req.user=decoded as JwtPayload
+    //     // console.log(decoded);
+    //     // decoded undefined
+    //     next();
+    //   }
+    // );
    
   });
 };
