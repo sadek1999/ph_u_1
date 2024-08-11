@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 import jwt, {  JwtPayload } from "jsonwebtoken";
 import config from "../../../config";
 import { TUserRole } from "../user/user.interface";
+import { User } from "../user/user.model";
 
 const auth = (...requiredRoles :TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +19,24 @@ const auth = (...requiredRoles :TUserRole[]) => {
 
       const decoded = jwt.verify(token,
         config.jwt_access_secret as string) as JwtPayload;
-        const role=decoded .role 
+        const{role,userId,iat}=decoded
+        
+
+        const user = await User.isUserExistsByCustomId(userId);
+        // console.log(user)
+      
+        if (!user) {
+          throw new appError(httpStatus.NOT_FOUND, "This user is not found !!");
+        }
+      
+        if (user?.isDeleted) {
+          throw new appError(httpStatus.NOT_FOUND, "This user already Deleted");
+        }
+        if (user?.status === "block") {
+          throw new appError(httpStatus.FORBIDDEN, "This user block ");
+        }
+
+
         if(requiredRoles && !requiredRoles.includes(role)){
             throw new appError(
                 httpStatus.UNAUTHORIZED,
@@ -26,35 +44,11 @@ const auth = (...requiredRoles :TUserRole[]) => {
               );  
         }
         req.user=decoded 
-        // console.log(decoded);
-        // decoded undefined
+        
         next();
     
 
-    // jwt.verify(
-    //   token,
-    //   config.jwt_access_secret as string,
-    //   function (err, decoded) {
-    //     // if (err) {
-    //     //   throw new appError(
-    //     //     httpStatus.UNAUTHORIZED,
-    //     //     "you are unauthorize user"
-    //     //   );
-    //     // }
-    //     // err
-    //     const role=(decoded as JwtPayload).role 
-    //     if(requiredRoles && !requiredRoles.includes(role)){
-    //         throw new appError(
-    //             httpStatus.UNAUTHORIZED,
-    //             "you are unauthorize user"
-    //           );  
-    //     }
-    //     req.user=decoded as JwtPayload
-    //     // console.log(decoded);
-    //     // decoded undefined
-    //     next();
-    //   }
-    // );
+   
    
   });
 };

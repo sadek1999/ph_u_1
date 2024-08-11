@@ -120,16 +120,20 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     session.startTransaction();
 
     userData.id = await generateAdminId();
+    // console.log(userData)
 
     const newUser = await User.create([userData], { session });
+    // console.log(newUser)
     if (!newUser.length) {
       throw new appError(httpStatus.BAD_REQUEST, "Field to crate User");
     }
 
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
+    console.log(payload)
 
     const newAdmin = await Admin.create([payload], { session });
+    // console.log(newAdmin)
     if (!newAdmin.length) {
       throw new appError(httpStatus.BAD_REQUEST, "Field to create Admin");
     }

@@ -13,12 +13,12 @@ const router = express.Router();
 // console.log('this is user router')
 
 router.post(
-  "/create-student",auth(USER_ROLE.admin),
+  "/create-student",
   ValidateRequest(createStudentValidationSchema),
   UserControllers.createStudent
 );
 
-router.post('/create-faculty',auth(USER_ROLE.admin),ValidateRequest(createFacultyValidationSchema),UserControllers.createFaculty)
+router.post('/create-faculty',ValidateRequest(createFacultyValidationSchema),UserControllers.createFaculty)
 router.post('/create-admin',ValidateRequest(createAdminValidationSchema),UserControllers.createAdmin)
 
 
