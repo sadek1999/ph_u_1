@@ -54,14 +54,14 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     payload.user = newUser[0]._id;
 // console.log('test')
     const newStudent = await Student.create([payload], { session });
-  
+  // console.log(newStudent)
     if (!newStudent) {
       throw new appError(httpStatus.BAD_REQUEST, "fail to create student");
     }
     // console.log('test-2')
     await session.commitTransaction();
     await session.endSession();
-
+// console.log(newStudent)
     return newStudent;
   } catch (err) {
     await session.abortTransaction();
@@ -130,7 +130,7 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
 
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
-    console.log(payload)
+    // console.log(payload)
 
     const newAdmin = await Admin.create([payload], { session });
     // console.log(newAdmin)
@@ -140,10 +140,10 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     await session.commitTransaction();
     await session.endSession();
     return newAdmin;
-  } catch (err) {
+  } catch (err:any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error("cant create Admin");
+    throw new Error(err);
   }
 };
 

@@ -120,5 +120,6 @@ const userNameSchema = new Schema<TUserName>({
     const existingUser = await Admin.findOne({ id });
     return existingUser;
   };
+  // console.log('inside admin')
   
   export const Admin = model<TAdmin, AdminModel>('Admin', adminSchema);
