@@ -4,12 +4,13 @@ import config from "../../../config";
 import bcrypt from "bcrypt";
 import { TUser, UserModel } from "./user.interface";
 
-const userSchema = new Schema<TUser,UserModel>(
+
+const userSchema = new Schema<TUser, UserModel>(
   {
     id: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select:0 },
+    password: { type: String, required: true, select: 0 },
     needsPasswordChange: { type: Boolean, default: true },
-    passwordChangeDate:{type:Date},
+    passwordChangeDate: { type: Date },
     role: { type: String, enum: ["admin", "student", "Faculty"] },
     status: {
       type: String,
@@ -34,20 +35,23 @@ userSchema.post("save", function (doc, next) {
 
   next();
 });
-userSchema.statics.isUserExistsByCustomId=async function (id:string){
- return await User.findOne({id}).select('+password')
-}
+userSchema.statics.isUserExistsByCustomId = async function (id: string) {
+  return await User.findOne({ id }).select("+password");
+};
 
-userSchema.statics.isPasswordMatch=async function (plainPassword:string,hashPassword:string) {
-  
- 
-  return await bcrypt.compare(plainPassword,hashPassword)
+userSchema.statics.isPasswordMatch = async function (
+  plainPassword: string,
+  hashPassword: string
+) {
+  return await bcrypt.compare(plainPassword, hashPassword);
   // await bcrypt.compare(payload.password, user.password)
-}
-// userSchema.static.isUserExistsByCustomId=async function (id:string) {
-  
-// }
+};
 
+userSchema.statics.isJwtCreateBeforePasswordChange = async function (
+  PasswordChangeTime:Date,
+  jwtCreateTime:number
+) {
+  console.log(PasswordChangeTime,jwtCreateTime)
+};
 
-
-export const User = model<TUser ,UserModel>("User", userSchema);
+export const User = model<TUser, UserModel>("User", userSchema);
