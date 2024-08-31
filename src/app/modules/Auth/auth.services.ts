@@ -4,7 +4,9 @@ import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../../config";
-import  bcrypt  from 'bcrypt';
+import bcrypt from "bcrypt";
+import { createToken } from "./auth.utills";
+import js from "@eslint/js";
 
 const LoginUser = async (payload: TLoginUser) => {
   // console.log(payload);
@@ -36,11 +38,17 @@ const LoginUser = async (payload: TLoginUser) => {
     userId: user?.id,
     role: user?.role,
   };
-  const accessToken = jwt.sign(
+  const accessToken = createToken(
     jsonPayload,
     config.jwt_access_secret as string,
-    { expiresIn: "24h" }
+    config.jwt_access_expire_in as string
   );
+
+  const refreshToken =createToken(
+    jsonPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expire_in as string
+  )
 
   return {
     accessToken,
@@ -71,22 +79,26 @@ const changePassword = async (
   if (!(await User.isPasswordMatch(payload?.OldPassword, user?.password))) {
     throw new appError(httpStatus.FORBIDDEN, "password can not match");
   }
-  
 
-  const newHashPassword= await bcrypt.hash(payload?.newPassword ,Number(config.saltRound))
+  const newHashPassword = await bcrypt.hash(
+    payload?.newPassword,
+    Number(config.saltRound)
+  );
   // console.log(newHashPassword)
 
-  const result =await User.findOneAndUpdate({
-    id:userData.userId,
-    role:userData.role
-  },{
-     password:newHashPassword,
-     needsPasswordChange:false,
-     passwordChangeDate:new Date()
-  })
+  const result = await User.findOneAndUpdate(
+    {
+      id: userData.userId,
+      role: userData.role,
+    },
+    {
+      password: newHashPassword,
+      needsPasswordChange: false,
+      passwordChangeDate: new Date(),
+    }
+  );
 
-  return result  
-  
+  return result;
 };
 
 export const authServices = {

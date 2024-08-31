@@ -51,7 +51,8 @@ userSchema.statics.isJwtCreateBeforePasswordChange = async function (
   PasswordChangeTime:Date,
   jwtCreateTime:number
 ) {
-  console.log(PasswordChangeTime,jwtCreateTime)
+  const PasswordChangeTimeinSecentd=new Date(PasswordChangeTime).getTime()/1000;
+  return(PasswordChangeTimeinSecentd>jwtCreateTime)
 };
 
 export const User = model<TUser, UserModel>("User", userSchema);
