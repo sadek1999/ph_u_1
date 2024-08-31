@@ -5,5 +5,5 @@ import jwt from "jsonwebtoken";
   secret: string,
   expiresIn: string
 ) => {
-  jwt.sign(jsonPayload, secret, { expiresIn });
+  return jwt.sign(jsonPayload, secret, { expiresIn });
 };

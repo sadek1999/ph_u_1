@@ -2,14 +2,23 @@ import httpStatus from "http-status";
 import catchAsync from "../../utility/catchAsync";
 import sendResponse from "../../utility/sandResponse";
 import { authServices } from "./auth.services";
+import config from "../../../config";
 
 const LoginUser = catchAsync(async (req, res) => {
   const result = await authServices.LoginUser(req.body);
+  const {refreshToken,accessToken,needPasswordChange}=result
+
+  res.cookie("refreshToken",refreshToken,{
+    secure:config.node_dev=='production',
+    httpOnly:true
+  })
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Successfully login user",
-    data: result,
+    data: {
+      accessToken,needPasswordChange
+    },
   });
 });
 
