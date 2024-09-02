@@ -7,6 +7,7 @@ import config from "../../../config";
 import bcrypt from "bcrypt";
 import { createToken } from "./auth.utills";
 import jwt from "jsonwebtoken"
+import { sendMail } from "../../utility/sendmail";
 
 const LoginUser = async (payload: TLoginUser) => {
   // console.log(payload);
@@ -149,8 +150,43 @@ const refreshToken=async(token:string)=>{
       return accessToken
 
 }
+
+const forgetPassword=async(id:string)=>{
+  const user = await User.isUserExistsByCustomId(id);
+      // console.log(user)
+    
+      if (!user) {
+        throw new appError(httpStatus.NOT_FOUND, "This user is not found !!");
+      }
+    
+      if (user?.isDeleted) {
+        throw new appError(httpStatus.NOT_FOUND, "This user already Deleted");
+      }
+      if (user?.status === "block") {
+        throw new appError(httpStatus.FORBIDDEN, "This user block ");
+      }
+      const jsonPayload = {
+        userId: user?.id,
+        role: user?.role,
+      };
+      const accessToken = createToken(
+        jsonPayload,
+        config.jwt_access_secret as string,
+        '10m'
+      );
+  
+
+      const restUILink=`${config.jwt_reset_password_ui_link}?id=${user.id}&token=${accessToken}`
+      sendMail()
+      console.log(restUILink)
+
+}
+
+
 export const authServices = {
   LoginUser,
   refreshToken,
   changePassword,
+  forgetPassword
+ 
 };

@@ -50,8 +50,21 @@ const result=await authServices.refreshToken(refreshToken)
   });
 })
 
+const forgetPassword=catchAsync(async(req,res)=>{
+  const {id}=req.body
+  const result =await authServices.forgetPassword(id)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Successfully recreate access token user",
+    data: result
+  });
+})
+
 export const authController = {
   LoginUser,
   refreshToken,
   changePassword,
+  forgetPassword
+ 
 };

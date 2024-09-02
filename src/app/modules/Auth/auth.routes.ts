@@ -2,11 +2,11 @@ import express from "express";
 import ValidateRequest from "../middlewares/validateRequest";
 import {
   ChangeLoginPasswordUserValidation,
+  forgetPasswordValidationSchema,
   LoginUserValidation,
   refreshTokenValidation,
 } from "./auth.validation";
 import { authController } from "./auth.controllers";
-
 
 const router = express.Router();
 
@@ -25,5 +25,10 @@ router.post(
   ValidateRequest(refreshTokenValidation),
   authController.refreshToken
 );
+
+router.post('/forget-password',
+  ValidateRequest(forgetPasswordValidationSchema),
+  authController.forgetPassword
+)
 
 export const AuthRoute = router;
