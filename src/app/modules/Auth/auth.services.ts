@@ -177,9 +177,16 @@ const forgetPassword=async(id:string)=>{
   
 
       const restUILink=`${config.jwt_reset_password_ui_link}?id=${user.id}&token=${accessToken}`
-      sendMail()
-      console.log(restUILink)
+      sendMail(user.email,restUILink)
+      // console.log(restUILink)
 
+}
+
+// const resetPassword=async(payload:{id:string,newPassword:string},token:string)=>{
+//   console.log(id,newPassword,token)
+// }
+const resetPassword=async(payload)=>{
+console.log(payload)
 }
 
 
@@ -187,6 +194,7 @@ export const authServices = {
   LoginUser,
   refreshToken,
   changePassword,
-  forgetPassword
+  forgetPassword,
+  resetPassword
  
 };
