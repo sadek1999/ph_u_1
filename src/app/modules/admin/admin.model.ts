@@ -101,10 +101,12 @@ const userNameSchema = new Schema<TUserName>({
   });
   
   // filter out deleted documents
-  adminSchema.pre('find', function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-  });
+
+adminSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
   
   adminSchema.pre('findOne', function (next) {
     this.find({ isDeleted: { $ne: true } });

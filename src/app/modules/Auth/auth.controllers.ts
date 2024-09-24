@@ -3,7 +3,6 @@ import catchAsync from "../../utility/catchAsync";
 import sendResponse from "../../utility/sandResponse";
 import { authServices } from "./auth.services";
 import config from "../../../config";
-import { resetPasswordValidationSchema } from "./auth.validation";
 
 const LoginUser = catchAsync(async (req, res) => {
   const result = await authServices.LoginUser(req.body);
@@ -63,9 +62,10 @@ const forgetPassword=catchAsync(async(req,res)=>{
 })
 
 const resetPassword=catchAsync(async(req,res)=>{
-  // const token=req.headers.authorization
-  console.log(req.body,req.headers.authorization)
-  const result =await authServices.forgetPassword()
+  const token=req.headers.authorization
+
+  // console.log(req.body)
+  const result =await authServices.resetPassword(req.body,token as string)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

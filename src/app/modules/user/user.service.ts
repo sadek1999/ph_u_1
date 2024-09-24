@@ -20,6 +20,7 @@ import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.model";
 import { AcademicDepartment } from "../academicDepartment/academicDepartment.model";
 
+
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {};
   // console.log(payload)
@@ -150,8 +151,31 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
   }
 };
 
+const getMe=async(userId:string,role:string)=>{
+  
+  let result=null
+  if(role=="student"){
+    result= await Student.findOne({id:userId}).populate('user')
+  }
+  if(role=="admin"){
+    result= await Admin.findOne({id:userId}).populate('user')
+  }
+  if(role=="Faculty"){
+    result=await Faculty.findOne({id:userId}).populate('user')
+  }
+  
+  
+  return result
+}
+const changeStatus=async(id:string,payload:{status:string})=>{
+  const result= await User.findByIdAndUpdate(id,payload,{new:true})
+  return result
+}
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMe,
+  changeStatus,
 };
