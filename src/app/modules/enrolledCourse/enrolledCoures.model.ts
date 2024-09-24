@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from "mongoose";
+import mongoose, {  Schema } from "mongoose";
 import { TCourseMark, TEnrolledCourse } from "./enrolledCourse.interface";
 import { Grad } from "./enrolleCourse.const";
 
