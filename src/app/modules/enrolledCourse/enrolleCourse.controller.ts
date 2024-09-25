@@ -6,7 +6,8 @@ import { enrolledCourseServices } from "./enrolleCourse.service";
 
 
 const CreateEnrolledCourseIntoDB=catchAsync(async(req,res)=>{
-    const result= await enrolledCourseServices.enrolledCoursesCrete()
+    const userId=req.user.userId
+    const result= await enrolledCourseServices.enrolledCoursesCrete(userId,req.body)
     sendResponse(res,{
         statusCode:httpStatus.OK,
         success:true,
