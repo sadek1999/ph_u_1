@@ -15,8 +15,9 @@ const CreateEnrolledCourseIntoDB=catchAsync(async(req,res)=>{
         data:result
     })
 })
-const updateEnrolledCourseIntoDB=catchAsync(async(req,res)=>{
-    const result= await enrolledCourseServices.enrolledCoursesCrete()
+const updateEnrolledCourseMarksIntoDB=catchAsync(async(req,res)=>{
+    const {userId}=req.user
+    const result= await enrolledCourseServices.enrolledCourseMarksUpdates(req.body,userId)
     sendResponse(res,{
         statusCode:httpStatus.OK,
         success:true,
@@ -26,5 +27,5 @@ const updateEnrolledCourseIntoDB=catchAsync(async(req,res)=>{
 })
 export const enrolledCourseController={
     CreateEnrolledCourseIntoDB,
-    updateEnrolledCourseIntoDB,
+    updateEnrolledCourseMarksIntoDB,
 }
