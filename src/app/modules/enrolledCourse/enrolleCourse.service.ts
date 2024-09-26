@@ -11,6 +11,8 @@ import { Course } from "../corse/corse.mode";
 import { SemesterRegistration } from "../semesterRegistration/semesterRegistration.model";
 
 import { Faculty } from "../faculty/faculty.model";
+import { calculateGradeAndPoints } from "./enrolledCourse.utils";
+import { Grad } from './enrolleCourse.const';
 
 const enrolledCoursesCrete = async (
   userId: string,
@@ -167,26 +169,42 @@ const enrolledCourseMarksUpdates = async (
       "the student can't enroll the course"
     );
   }
-  const facultyId = await Faculty.findOne({ id },{_id:1});
-  if(!facultyId){
-    throw new appError(httpStatus.NOT_FOUND,"faculty is not found")
+  const facultyId = await Faculty.findOne({ id }, { _id: 1 });
+  if (!facultyId) {
+    throw new appError(httpStatus.NOT_FOUND, "faculty is not found");
   }
   // const faculty=facultyId._id.toString()
 
-  const isFacultyBelowTheCourse=await EnrolledCourse.findOne({
+  const isFacultyBelowTheCourse = await EnrolledCourse.findOne({
     semesterRegistration,
     offeredCourse,
     student,
-   Faculty:facultyId._id
-  })
-  if(!isFacultyBelowTheCourse){
-    throw new appError(httpStatus.UNAUTHORIZED,'you are unauthorized')
+    Faculty: facultyId._id,
+  });
+  if (!isFacultyBelowTheCourse) {
+    throw new appError(httpStatus.UNAUTHORIZED, "you are unauthorized");
   }
-  console.log(isFacultyBelowTheCourse)
-  // const a=await EnrolledCourse.findOne({student})
-  // console.log(a)
+  const modifiedMarks: Record<string, undefined> = {
+    ...courseMarks,
+  };
+  if (courseMarks?.finalTerm) {
+    const { classTest1, classTest2, midTerm, finalTerm } = courseMarks;
+    const totalMarks =(
 
-  // console.log(isOfferedCourseExist.faculty,faculty._id)
+    
+      Math.ceil(classTest1 * 0.1) +
+      Math.ceil(classTest2 * 0.0) +
+      Math.ceil(midTerm * 0.3) +
+  
+  
+      Math.ceil(finalTerm * 0.5))
+     const result= calculateGradeAndPoints(totalMarks)
+
+     modifiedMarks.grade=result.grade,
+     modifiedMarks.gradePoints=result.gradePoints,
+     modifiedMarks.isCompleted=true
+     
+  }
   
 };
 export const enrolledCourseServices = {
