@@ -2,10 +2,10 @@ import { Types } from "mongoose"
 
 export type TGrad='A' | 'B' | 'C' | 'D' | 'F' | 'NA'
 export type TCourseMark={
-    quiz_1:number,
-    mid:number,
-    quiz_2:number,
-    final:number
+    classTest1:number,
+    midTerm:number,
+    classTest2:number,
+    finalTerm:number
 }
 
 export type TEnrolledCourse={

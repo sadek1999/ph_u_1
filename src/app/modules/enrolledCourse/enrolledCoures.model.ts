@@ -3,10 +3,10 @@ import { TCourseMark, TEnrolledCourse } from "./enrolledCourse.interface";
 import { Grad } from "./enrolleCourse.const";
 
 const courseMarksSchema = new Schema<TCourseMark>({
-  quiz_1: { type: Number, min: 0, max: 10, default: 0 },
-  mid: { type: Number, min: 0, max: 30, default: 0 },
-  quiz_2: { type: Number, min: 0, max: 10, default: 0 },
-  final: { type: Number, min: 0, max: 40, default: 0 },
+  classTest1: { type: Number, min: 0, max: 10, default: 0 },
+  midTerm: { type: Number, min: 0, max: 30, default: 0 },
+  classTest2: { type: Number, min: 0, max: 10, default: 0 },
+  finalTerm: { type: Number, min: 0, max: 50, default: 0 },
 });
 
 const enrolledCourseSchema = new Schema<TEnrolledCourse>(

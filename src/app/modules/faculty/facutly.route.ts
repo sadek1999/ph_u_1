@@ -7,7 +7,7 @@ import { USER_ROLE } from '../user/user.const';
 const router=express.Router();
 
 router.get('/', auth(USER_ROLE.Faculty,USER_ROLE.admin),facultyControllers.getAllFaculty)
-router.get("/:facultyId",auth(),facultyControllers.getSingleFaculty)
+router.get("/:facultyId",auth('Faculty','admin'),facultyControllers.getSingleFaculty)
 router.delete('/:facultyId',auth(USER_ROLE.admin),facultyControllers.deleteSingleFaculty)
-router.patch('/:facultyID',auth(),facultyControllers.updateFaculty)
+router.patch('/:facultyID',auth('admin'),facultyControllers.updateFaculty)
 export const FacultyRouter= router

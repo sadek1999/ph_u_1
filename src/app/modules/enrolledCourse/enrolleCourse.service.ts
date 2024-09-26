@@ -10,6 +10,8 @@ import { Course } from "../corse/corse.mode";
 
 import { SemesterRegistration } from "../semesterRegistration/semesterRegistration.model";
 
+import { Faculty } from "../faculty/faculty.model";
+
 const enrolledCoursesCrete = async (
   userId: string,
   payload: TEnrolledCourse
@@ -49,8 +51,6 @@ const enrolledCoursesCrete = async (
     isOfferedCourseExist.semesterRegistration
   ).select("maxCredit");
 
- 
-
   const enrolledCourses = await EnrolledCourse.aggregate([
     {
       $match: {
@@ -60,19 +60,19 @@ const enrolledCoursesCrete = async (
     },
     {
       $lookup: {
-        from: 'courses',
-        localField: 'course',
-        foreignField: '_id',
-        as: 'enrolledCourseData',
+        from: "courses",
+        localField: "course",
+        foreignField: "_id",
+        as: "enrolledCourseData",
       },
     },
     {
-      $unwind: '$enrolledCourseData',
+      $unwind: "$enrolledCourseData",
     },
     {
       $group: {
         _id: null,
-        totalEnrolledCredits: { $sum: '$enrolledCourseData.credits' },
+        totalEnrolledCredits: { $sum: "$enrolledCourseData.credits" },
       },
     },
     {
@@ -83,7 +83,7 @@ const enrolledCoursesCrete = async (
     },
   ]);
   const totalCredits =
-  enrolledCourses.length > 0 ? enrolledCourses[0].totalEnrolledCredits : 0;
+    enrolledCourses.length > 0 ? enrolledCourses[0].totalEnrolledCredits : 0;
   if (
     totalCredits &&
     maxCredits &&
@@ -138,15 +138,58 @@ const enrolledCoursesCrete = async (
     throw new Error(err);
   }
 
-   
-
   // return null;
 };
 
-const enrolledCourseMarksUpdates = async (payload:Partial<TEnrolledCourse>,id:string) => {
-  console.log(payload,id)
+const enrolledCourseMarksUpdates = async (
+  payload: Partial<TEnrolledCourse>,
+  id: string
+) => {
+  // console.log(payload,id)
+  const { semesterRegistration, offeredCourse, student, courseMarks } = payload;
+
+  const isSemesterRegistrationExist = await SemesterRegistration.findById(
+    semesterRegistration
+  );
+  if (!isSemesterRegistrationExist) {
+    throw new appError(httpStatus.NOT_FOUND, "semester is not exist");
+  }
+
+  const isOfferedCourseExist = await OfferedCourse.findById(offeredCourse);
+
+  if (!isOfferedCourseExist) {
+    throw new appError(httpStatus.NOT_FOUND, "offered course is not exist");
+  }
+  const isStudentExist = await Student.findById(student);
+  if (!isStudentExist) {
+    throw new appError(
+      httpStatus.NOT_FOUND,
+      "the student can't enroll the course"
+    );
+  }
+  const facultyId = await Faculty.findOne({ id },{_id:1});
+  if(!facultyId){
+    throw new appError(httpStatus.NOT_FOUND,"faculty is not found")
+  }
+  // const faculty=facultyId._id.toString()
+
+  const isFacultyBelowTheCourse=await EnrolledCourse.findOne({
+    semesterRegistration,
+    offeredCourse,
+    student,
+   Faculty:facultyId._id
+  })
+  if(!isFacultyBelowTheCourse){
+    throw new appError(httpStatus.UNAUTHORIZED,'you are unauthorized')
+  }
+  console.log(isFacultyBelowTheCourse)
+  // const a=await EnrolledCourse.findOne({student})
+  // console.log(a)
+
+  // console.log(isOfferedCourseExist.faculty,faculty._id)
+  
 };
 export const enrolledCourseServices = {
   enrolledCoursesCrete,
-   enrolledCourseMarksUpdates,
+  enrolledCourseMarksUpdates,
 };
