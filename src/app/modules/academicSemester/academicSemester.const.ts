@@ -1,6 +1,7 @@
 import { TAcademicSemesterNameCode, TMonths, TSemesterCode, TSemesterName } from "./academicSemeste.interface";
 
 
+export const AcademicSemesterSearchableFields = ['name', 'year'];
  export const months: TMonths[] = [
     "January",
     "February",

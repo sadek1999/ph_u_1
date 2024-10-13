@@ -11,13 +11,13 @@ const cerateAcademicSemester = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "successfully create student",
+    message: "successfully create academic Semester",
     data: result,
   });
 });
 
 const getAllAcademicSemester = catchAsync(async (req, res) => {
-  const result = await academicSemesterServices.getAllSemestersFromDB();
+  const result = await academicSemesterServices.getAllSemestersFromDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

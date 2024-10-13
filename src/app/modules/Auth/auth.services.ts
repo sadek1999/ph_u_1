@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import appError from "../../error/appError";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
-import { JwtPayload, verify } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import config from "../../../config";
 import bcrypt from "bcrypt";
 import { createToken, VerifyToken } from "./auth.utills";
@@ -213,7 +213,7 @@ const resetPassword=async(payload:{id:string,newPassword:string},token:string)=>
       payload?.newPassword,
       Number(config.saltRound)
     );
-     const result = await User.findOneAndUpdate(
+     await User.findOneAndUpdate(
     {
       id: decoded?.userId,
       role: decoded?.role,
