@@ -73,6 +73,30 @@ const resetPassword=catchAsync(async(req,res)=>{
     data: result
   });
 })
+const resetPassword=catchAsync(async(req,res)=>{
+  const token=req.headers.authorization
+
+  // console.log(req.body)
+  const result =await authServices.resetPassword(req.body,token as string)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Successfully recreate access token user",
+    data: result
+  });
+})
+const resetPassword=catchAsync(async(req,res)=>{
+  const token=req.headers.authorization
+
+  // console.log(req.body)
+  const result =await authServices.resetPassword(req.body,token as string)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Successfully recreate access token user",
+    data: result
+  });
+})
 
 export const authController = {
   LoginUser,
